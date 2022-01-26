@@ -1,4 +1,2 @@
 User-agent: *
-Disallow: /assets/
-Disallow: /config/
-Disallow: /_tests/
+Disallow: *
