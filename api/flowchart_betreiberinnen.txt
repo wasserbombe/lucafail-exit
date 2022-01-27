@@ -1,0 +1,35 @@
+st=>start: Start
+check_law=>operation: Prüfe die Rechtslage
+(CoronaVO, Gesundheitsamt, ...)
+kpnv_required=>condition: Genügt anonyme
+Kontakterfassung?
+anonym_possible=>condition: Hast Du vorher 
+Luca genutzt?
+usecwa=>end: Erstelle QR-Codes für die
+Corona-Warn-App und weise 
+Deine Gäste auf diese 
+Möglichkeit hin.
+luca_license=>condition: Hat Dein Gesundheitsamt
+(noch) eine Luca-Lizenz?
+yes_luca_license=>end: Erstelle QR-Codes für
+die Luca-App.
+Achte darauf, dass die
+Kompatibilität mit der
+Corona-Warn-App aktiv ist.
+no_luca_license=>end: Nutze handschriftliche
+Kontaktdatenformulare 
+o. alternative Apps.
+Unterstütze zusätzlich 
+die Corona-Warn-App.
+prevluca=>operation: Lösche Deine Location
+bei Luca, entferne Luca-
+QR-Codes.
+
+st->check_law
+check_law->kpnv_required
+kpnv_required(yes)->anonym_possible
+kpnv_required(no)->luca_license
+anonym_possible(no)->usecwa
+anonym_possible(yes)->prevluca->usecwa
+luca_license(yes)->yes_luca_license
+luca_license(no)->no_luca_license

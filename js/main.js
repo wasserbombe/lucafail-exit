@@ -1,81 +1,105 @@
 (function(){
-    var locationNames = {}; 
-    var qrs = [];
-    function getLocationName(id){
-        if (typeof locationNames[id] == 'undefined'){
-            $.ajax({
-                "url": "/api/getLocation.php?id=" + id,
-                "success": function(data){
-                    locationNames[id] = data.data;
+    $.ajax({
+        "url": "/api/flowchart_betreiberinnen.txt",
+        "success": function(data){
+            var diagram = flowchart.parse(data);
+            diagram.drawSVG(
+                'flowchart_betreiberrinnen',
+                {
+                    'yes-text': 'Ja',
+                    'no-text': 'Nein'
                 }
-            });
+            );
         }
-
-        return locationNames[id];
-    }
-    function updateTable(){
-        
-        $("#table tbody").html(""); 
-        for (var q = 0; q < qrs.length; q++){
-            var $tr = $("<tr>");
-            $tr.append($("<td>").text(qrs[q].groupName));
-            $tr.append($("<td>").text(qrs[q].locationName));
-            $tr.append($("<td>").text(qrs[q].data?atob(qrs[q].data):""));
-
-            $("#table tbody").append($tr);
-        }
-       
-    }
-    function addQRIfNotExists(qr){
-        var found = false; 
-        for (var q = 0; q < qrs.length; q++){
-            if (qrs[q].name == qr.name && qrs[q].data == qr.data){
-                found = true; 
-                break; 
-            }
-        }
-
-        if (!found){
-            qrs.push(qr);
-            updateTable();
-        }
-    }
-    function onScanSuccess(decodedText, decodedResult) {
-        try {
-            var lucaURL = new URL (decodedText); 
-            var lucaID = lucaURL.pathname.replace(/^\/webapp\//, '');
-            var lname = getLocationName(lucaID);
-
-            if (lname && lname.name){
-                lname.data = ""; 
-
-                var dataMatch = lucaURL.hash.match(/#([^\/]+)/i);
-                if (dataMatch){
-                    lname.data = dataMatch[1]; 
-                }
-                addQRIfNotExists({name: lname.name, data: lname.data, locationName: lname.locationName, groupName: lname.groupName});
-            } 
-            
-        } catch {};
-    }
+    });
     
-    function onScanFailure(error) {
-        // alert("Code error = " + error);
-    }
-    
-    let html5QrcodeScanner = new Html5QrcodeScanner(
-        "reader",
-        { 
-            fps: 30, 
-            qrbox: {
-                width: 250, 
-                height: 250
+
+    /*flowSVG.draw(SVG('flowchart_betreiberrinnen').size("100%", 700));
+    flowSVG.config({
+        interactive: false,
+        showButtons: false,
+        connectorLength: 60,
+        scrollto: false,
+        labelYes: "Ja",
+        labelNo: "Nein"
+    });
+    flowSVG.shapes(
+        [
+            {
+                label: 'start',
+                type: 'process',
+                text: [
+                    'Prüfe die Rechtslage:',
+                    'CoronaVO, Gesundheitsamt'
+                ],
+                //yes: 'hasOAPolicy',
+                next: 'kpnv_required'
             },
-            formatsToSupport: [ 
-                Html5QrcodeSupportedFormats.QR_CODE
-            ]
-        },
-        /* verbose= */ false
-    );
-    html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+            {
+                label: 'kpnv_required',
+                type: 'decision',
+                text: [
+                    'Genügt anonyme',
+                    'Kontaktdatenerfassung?'
+                ],
+                no: 'luca_license',
+                yes: 'anonympossible'
+            },
+            {
+                label: 'anonympossible',
+                type: 'decision',
+                text: [
+                    'Hast Du vorher',
+                    'Luca genutzt?'
+                ],
+                no: 'usecwa'
+            },{
+                label: 'luca_license',
+                type: 'decision',
+                text: [
+                    'Hat Dein Gesundheitsamt',
+                    'eine Luca-Lizenz?'
+                ],
+                no: 'no_luca_license',
+                yes: 'yes_luca_license'
+            },
+            {
+                label: 'no_luca_license',
+                type: 'finish',
+                text: [
+                    'Nutze handschriftliche',
+                    'Kontaktdatenformulare o.',
+                    'alternative Apps'
+                ]
+            },{
+                label: 'prevluca',
+                type: 'process',
+                text: [
+                    'Lösche Deine Location',
+                    'bei Luca, entferne Luca-',
+                    'QR-Codes.'
+                ],
+                next: 'usecwa'
+            },{
+                label: 'usecwa',
+                type: 'finish',
+                text: [
+                    'Erstelle QR-Codes für',
+                    'die Corona-Warn-App',
+                    'und nutze diese. Entferne',
+                    'bestehende Luca-QR-Codes.'
+                ]
+            },{
+                label: 'yes_luca_license',
+                type: 'finish',
+                text: [
+                    'Erstelle QR-Codes für',
+                    'die Luca-App.',
+                    'Achte darauf, dass die',
+                    'Kompatibilität mit der',
+                    'Corona-Warn-App aktiv ist.'
+                ]
+
+            }
+        ]);*/
 })(); 

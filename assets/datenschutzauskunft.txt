@@ -1,0 +1,22 @@
+== Auskunft gemäß Art. 15 DS-GVO ==
+
+=== Zu Ihrer Person gespeicherte Daten ===
+Keine. 
+
+=== Verarbeitungszwecke === 
+Wir verarbeiten keine personenbezogene Daten. 
+
+=== Datenkategorien === 
+Wir verarbeiten keine personenbezogene Daten. 
+
+=== Datenempfänger === 
+Eine Weitergabe nicht existenter Daten an Dritte erfolgt nicht. 
+
+=== Speicherdauer === 
+Wir speichern keine Daten, die wir nicht haben. 
+
+=== Betroffenenrechte (Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung und Widerspruch) ===
+Sie haben bei Vorliegen der gesetzlichen Voraussetzungen ein Recht auf Berichtigung oder Löschung der Sie
+betreffenden personenbezogenen Daten sowie auf Einschränkung der Verarbeitung und auf Widerspruch gegen
+die Verarbeitung. 
+Da wir keine personenbezogenen Daten über Sie speichern oder verarbeiten, dürfte sich das aber erübrigen.
