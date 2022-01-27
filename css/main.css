@@ -52,3 +52,7 @@ div.quote-origin {
     background-color: #8b0000;
     color: white; 
 }
+
+.btn {
+    margin: 5px;
+}
