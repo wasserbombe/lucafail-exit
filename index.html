@@ -157,7 +157,7 @@
                         <br><br>
                     </li>
                     <li>
-                        <b>Weise Deine Gäste darauf hin</b>, dass es sinnvoll wäre, wenn sie ihre Corona-Warn-App aktiv haben und mithilfe Deines QR-Codes auch einchecken (dann sehen sie den Besuch bei Dir auch automatisch in ihrem Kontakttagebuch). <br>Beachte, dass wenn eine Kontaktdatenerfassung vorgeschrieben ist, dieser Check-In verpflichtend ist.
+                        <b>Schütze Deine Gäste.</b> Weise Deine Gäste darauf hin, dass es sinnvoll wäre, wenn sie ihre Corona-Warn-App aktiv haben und mithilfe Deines QR-Codes auch einchecken (dann sehen sie den Besuch bei Dir auch automatisch in ihrem Kontakttagebuch). <br>Beachte, dass wenn eine Kontaktdatenerfassung vorgeschrieben ist, dieser Check-In verpflichtend ist.
                     </li>
                 </ul>
                 <button type="button" class="btn btn-outline-secondary" onClick='window.open("https://www.coronawarn.app/de/eventregistration/", "_blank");'>🦠 QR-Codes für die Corona-Warn-App erstellen</button><br><br>
@@ -208,6 +208,33 @@
                         <b>Die Kommunen</b> sollten informiert werden, damit sie keine Schlüsselanhänger mehr ausgeben, wenn diese sowieso nicht mehr genutzt werden.
                     </li>
                 </ul>
+                <div class="accordion" id="accordionSummary">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingAvailCheck">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAvailCheck" aria-expanded="false" aria-controls="collapseAvailCheck">
+                                <b>Status in meinem Kreis prüfen</b>
+                            </button>
+                        </h2>
+                        <div id="collapseAvailCheck" class="accordion-collapse collapse" aria-labelledby="headingAvailCheck" data-bs-parent="#accordionSummary">
+                            <div class="accordion-body">
+
+                                Land-/Stadtkreis: <input type="text" id="lsupport_searchterm">
+
+                                <table class="table" id="lsupport_table">
+                                    <thead>
+                                        <th>Kreis</th>
+                                        <th>Anbindung laut Luca-Webseite</th>
+                                        <th>Bemerkung</th>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                                <small>
+                                    Die hier angezeigten Daten basieren auf den Postleitzahlen, die Luca auf seiner Webseite als "angebunden" ausweist. Die Postleitzahlen werden mithilfe von Daten des Statistischen Bundesamts (DESTATIS) mit Landkreisen verknüpft (Stand: 31.12.2021). 
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <br><br>
                 
                 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">

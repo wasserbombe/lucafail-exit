@@ -1,3 +1,5 @@
 _temp/*
 api/cache/*
 js/test/*
+api/data/*.tsv
+api/supportLookup.json
