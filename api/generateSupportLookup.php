@@ -43,10 +43,14 @@
 
     $fds_tags = array("lucaexit-missbrauch_kpnv","lucaexit-nutzungsstatus");
 
+    include __DIR__.'/../config/config.php';
+
     // check if we find geocoding information for this ZIP code. If not, we'll assume it's a Postfach. 
     function isPostfach($zip){
+        global $_CONFIG; 
+
         // Google Maps Geocoding API key, limited to IP of luca.fail
-        $url = "https://maps.googleapis.com/maps/api/geocode/json?address=".urlencode($zip.", Deutschland")."&key=AIzaSyAfGDmBy1DVMSmlCxz_KmdjYKYzMVc6tBM";
+        $url = "https://maps.googleapis.com/maps/api/geocode/json?address=".urlencode($zip.", Deutschland")."&key=".$_CONFIG["gm_geolocation_api_key"];
         $res = cachedWebRequest($url, "geocoding");
         $res = json_decode($res, true);
 
