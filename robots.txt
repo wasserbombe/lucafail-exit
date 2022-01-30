@@ -1,2 +1,5 @@
 User-agent: *
-Disallow: *
+Disallow: /config/
+Disallow: /assets/
+Disallow: /convert/
+Disallow: /api/

@@ -7,3 +7,4 @@ api/archive/zipsupport/*
 api/health_departments.json
 api/fds_departments.json
 config/*
+robots.txt
