@@ -13,132 +13,127 @@
         }
     });
 
-    var supportPerArea = []; 
+    var healthDepartments = []; 
     $.ajax({
-        "url": "/api/supportLookup.json",
+        "url": "/api/health_departments.json",
         "success": function(data){
-            supportPerArea = data.data; 
+            healthDepartments = data.data;
         }
     });
-
-    $("#lsupport_searchterm").on("keyup", function(){
-        // check if lookup ready
-        if (supportPerArea.length > 0){
+    $("#hdsupport_searchterm").on("keyup", function(){
+        if (healthDepartments.length > 0) {
             var searchTerm = $(this).val().toLowerCase();
-            $("#lsupport_table tbody").html("");
-            if (searchTerm.length > 3){
-                supportPerArea.forEach((area) => {
-                    if (area.kname.toLowerCase().indexOf(searchTerm) >= 0){
-                        var $tr = $("<tr>");
-                        $tr.append($("<td>").text(area.kname));
-                        var pct = area.supportedZIPs/area.totalZIPs;
-                        var pct_full = pct*100; 
-                        $tr.append($("<td>").text((Math.round(pct_full * 100) / 100) + "%"));
-                        $("#lsupport_table tbody").append($tr);
-                        var text = ""; 
-                        if (pct == 1){
-                            text = '⚠️ Luca weist diesen Landkreis als "angebunden" aus. Sollte Luca vonseiten des Gesundheitsamtes hier aber gar nicht genutzt werden, dann solltest Du Luca informieren, sodass es auf der Webseite korrigiert werden kann.<br><a href="https://fragdenstaat.de/behoerden/?q='+area.kname.replace(/,.*$/, '')+'&jurisdiction=&category=&classification=gesundheit" target="_blank">Frage bei Deinem Gesundheitsamt nach</a>, ob die Information auf der Luca-Webseite stimmt und man hier Kontaktnachverfolgung betreibt und Luca nutzt.';
-                        } else if (pct == 0){
-                            text = "✔️ Luca weist diesen Kreis als \"nicht angebunden\" auf seiner Webseite aus. D.h. die App funktioniert in diesem Bereich nicht und keiner wiegt sich in falscher Sicherheit.";
+            $("#hdsupport_table tbody").html("");
+            healthDepartments.forEach((department) => {
+                var take = false; 
+                department.zips.forEach((zip) => {
+                    if (zip.toLowerCase().indexOf(searchTerm) > -1) {
+                        take = true; 
+                    }
+                }); 
+                if (take || department.name_long.toLowerCase().indexOf(searchTerm) > -1) {
+                    var $tr = $("<tr>");
+                    $tr.append($("<td>").html('<b>'+department.name + "</b><br>" + department.name_addition));
+                    var pct = department.zips_supported.length/department.zips.length;
+                    var pct_full = pct*100; 
+                    
+                    var angebunden_html = ""; 
+                    var text = ""; 
+                    if (pct == 1){
+                        angebunden_html = '<span class="badge-anonym badge-anonym-nie" title="'+((Math.round(pct_full * 100) / 100) + "%")+'">angebunden</span>';
+                        text = 'Laut Luca-Webseite ist dieses Gesundheitsamt angebunden und könnte eine Kontaktnachverfolgung über das Luca-System durchführen. Jedoch haben die meisten Gesundheitsämter die Kontaktnachverfolgung eingestellt, die meisten Bundesländer haben die Luca-Lizenz außerdem gekündigt.<br>Du solltest nachfragen, ob dieses Gesundheitsamt wirklich noch Luca nutzt, und falls nicht, das Gesundheitsamt auffordern, den Eintrag auf der Luca-Webseite ändern zu lassen und Betreiber:innen von Locations darüber zu benachrichtigen. Denn wenn das Gesundheitsamt nicht mehr Luca nutzt, dann ist es sinnlos, Luca als Betreiber:in oder Nutzer:in weiterhin zu nutzen. ';
+                    } else if (pct == 0){
+                        angebunden_html = '<span class="badge-anonym badge-anonym-immer" title="'+((Math.round(pct_full * 100) / 100) + "%")+'">nicht angebunden</span>';
+                        text = "Laut Luca-Webseite ist dieses Gesundheitsamt nicht angebunden. D.h. es wird keine Kontaktnachverfolgung über die Luca-App durchgeführt und es erfolgt keine Warnung zu einer möglichen Infektion über die Luca-App. Für Betreiber:innen als auch Nutzer:innen hat die Luca-App hier also keinen Nutzen. ";
+                    } else {
+                        angebunden_html = '<span class="badge-anonym badge-anonym-meist" title="'+((Math.round(pct_full * 100) / 100) + "%")+'">teilw. angebunden?</span>';
+                        text = "❓ Nur ein Teil des Gebiets, für welches dieses Gesundheitsamt verantwortlich ist, ist laut Luca-Webseite angebunden. Es fehlen: "+ department.zips_not_supported.join(', ') + '.';
+                    }
+                    $tr.append($("<td>").html(angebunden_html));
+                    $tr.append($("<td>").html(text));
+
+                    var $actiontd = $("<td>");
+                    if (department.fds && department.fds.id){
+                        if (department.fds_requests && department.fds_requests["lucaexit-missbrauch_kpnv"] && department.fds_requests["lucaexit-missbrauch_kpnv"].length > 0){
+                            var $btn_missbrauch_response = $("<button>").addClass("btn btn-success btn-sm").html("<small>Antwort: Daten-Missbrauch?</small>");
+                            var request = department.fds_requests["lucaexit-missbrauch_kpnv"][0];
+                            $btn_missbrauch_response.click(function(){
+                                var fds_url = "https://fragdenstaat.de"+request.url;
+
+                                window.open(fds_url, "_blank");
+                            });
+
+                            $actiontd.append($btn_missbrauch_response);
                         } else {
-                            text = "❓ Nur ein Teil des Kreises wird von Luca als \"angebunden\" ausgewiesen: Nur " + area.supportedZIPs + " von " + area.totalZIPs + ' Postleitzahlen.<br><a href="https://fragdenstaat.de/behoerden/?q='+area.kname.replace(/,.*$/, '')+'&jurisdiction=&category=&classification=gesundheit" target="_blank">Frage bei Deinem Gesundheitsamt nach</a>, ob man dort noch Luca nutzt oder nicht.';
+                            var fds_txt_missbrauch = [
+                                'Vor dem Hintergrund, dass es in Mainz (vgl. https://www.swr.de/swraktuell/rheinland-pfalz/mainz/polizei-ermittelt-ohne-rechtsgrundlage-mit-daten-aus-luca-app-100.html) und in Heilbronn (vgl. https://www.stimme.de/regional/region/polizei-wollte-luca-daten-haben-art-4581945) Anfragen an Landratsämter/Gesundheitsämter nach Informationen aus der Corona-Kontaktnachverfolgung gab:',
+                                '1. Schriftverkehr seit Januar 2021, auch elektronischer Art, zu allen Anfragen auf Übermittlung oder Einsicht in Kontaktverfolgungsdaten durch andere Stellen als dem Gesundheitsamt (z.B. Polizei, Verwaltung, Finanzverwaltung, Staatsanwaltschaft, etc.) und/oder zu allen Anfragen auf Übermittlung oder Einsicht in Kontaktverfolgungsdaten zu einem anderen Zweck als dem im Infektionsschutzgesetz genannten. Personenbezogene Daten können geschwärzt werden.',
+                                '',                            
+                                '2. Die Gesamtzahl von entsprechenden Anfragen seit Anfang 2021,',
+                                '- bei denen es zu einer Auskunft kam (inkl. Form: E-Mail, Fax, Einsicht, ...)',
+                                '- bei denen eine Auskunft durch Sie abgelehnt wurde (inkl. Grund)',
+                                '- die erfolglos waren, weil entsprechende Daten nicht vorhanden waren',
+                                'jeweils gegliedert nach',
+                                '- Daten/Anfragen, die sich auf die Luca-App beziehen (weil darüber erfasst oder explizit danach gefragt)',
+                                '- Daten/Anfragen, die sich NICHT auf Luca beziehen (weil nicht darüber erfasst)',
+                                'beide Punkte untergliedert nach',
+                                '- Herkunft der Anfrage (Amt, Behörde, etc.)'
+                            ];
+
+                            var $btn_frag_missbrauch = $("<button>").addClass("btn btn-primary btn-sm").html("<small>Frag nach Daten-Missbrauch!</small>");
+                            $btn_frag_missbrauch.click(function(){
+                                var fds_url = "https://fragdenstaat.de/anfrage-stellen/an/"+department.fds.slug+"/"
+                                                +"?subject="+encodeURIComponent(department.name + ": Nutzung von Kontaktnachverfolgungsdaten zu anderen Zwecken als dem Infektionsschutz")
+                                                +"&body="+encodeURIComponent(fds_txt_missbrauch.join("\r\n"))
+                                                +"&tags="+encodeURIComponent("luca-app,lucaexit-missbrauch_kpnv,kontaktnachverfolgung")
+                                                +"&hide_similar=1&hide_public=1&hide_editing=1";
+                                                ;
+
+                                window.open(fds_url, "_blank");
+                            });
+
+                            $actiontd.append($btn_frag_missbrauch);
                         }
 
-                        $tr.append($("<td>").html(text));
+                        var fds_txt_status = [
+                            'Informationen über die aktuelle Nutzung des Luca-Systems in Ihrer Behörde, insbesondere:',
+                            '- Ist Ihre Behörde derzeit an das Luca-System angebunden? Wenn ja, seit wann und bis wann?',
+                            '- Nutzt Ihre Behörde das Luca-System? Wenn ja, für was (Kontaktnachverfolgung bzw. -ermittlung, "Warnungen", ...)? ',
+                            '- Wie viele Kontaktnachverfolgungen wurden in den letzten 3 bzw. 6 Monaten via Luca durchgeführt (bitte einzeln beantworten)?',
+                            '- Ist eine weitere Nutzung des Luca-System durch das Bundesland vorgesehen? Falls nein, ziehen Sie einen eigenen Vertrag mit Luca in Betracht?',
+                            '- Wäre eine Nutzung von Luca Connect in Ihrem Amt derzeit möglich?',
+                            '- Wie oft wurde Luca Connect bzw. die dazugehörigen Features von Ihnen bereits genutzt?',
+                            ''
+                        ];
+
+                        if (pct > 0){
+                            fds_txt_status.push('Die Webseite von Luca gibt an, dass folgende Postleitzahlen von Ihrer Behörde angebunden sind: ' + department.zips_supported.join(', ') + ' - d.h., dass Sie dort mithilfe des Luca-Systems eine Kontaktnachverfolgung durchführen. Entspricht das der Realität, d.h. können Luca-Nutzer in diesem Gebiet sich darauf verlassen, dass Sie - sollte es sich um eine Luca-Location handeln - sie darauf hinweisen, dass Sie möglicherweise Kontakt mit einer infizierten Person hatten?');
+                            if (pct < 1){
+                                fds_txt_status.push('Die Luca-Webseite gibt darüber hinaus an, dass folgende Postleitzahlen nicht angebunden sind: ' + department.zips_not_supported.join(', ') + ' - ist das richtig?'); 
+                            }
+                        } else {
+                            fds_txt_status.push('Die Webseite von Luca gibt an, dass derzeit kein von Ihnen betreuter Bereich ans Luca-System angeschlossen ist. Ist das richtig?');
+                        }
+
+                        var $btn_frag_status = $("<button>").addClass("btn btn-primary btn-sm").html("<small>Frag nach Luca-Status!</small>");
+                        $btn_frag_status.click(function(){
+                            var fds_url = "https://fragdenstaat.de/anfrage-stellen/an/"+department.fds.slug+"/"
+                                            +"?subject="+encodeURIComponent(department.name + ": Aktuelle Nutzung des Luca-Systems in Ihrer Behörde")
+                                            +"&body="+encodeURIComponent(fds_txt_status.join("\r\n"))
+                                            +"&tags="+encodeURIComponent("luca-app,lucaexit-nutzungsstatus")
+                                            +"&hide_similar=1&hide_public=1&hide_editing=1";
+                                            ;
+
+                            window.open(fds_url, "_blank");
+                        });
+                        $actiontd.append($btn_frag_status);
                     }
-                })
-            }
-            
+                    $tr.append($actiontd);
+                    
+
+                    $("#hdsupport_table tbody").append($tr);
+                }
+            });
         }
-    });
-    
-
-    /*flowSVG.draw(SVG('flowchart_betreiberrinnen').size("100%", 700));
-    flowSVG.config({
-        interactive: false,
-        showButtons: false,
-        connectorLength: 60,
-        scrollto: false,
-        labelYes: "Ja",
-        labelNo: "Nein"
-    });
-    flowSVG.shapes(
-        [
-            {
-                label: 'start',
-                type: 'process',
-                text: [
-                    'Prüfe die Rechtslage:',
-                    'CoronaVO, Gesundheitsamt'
-                ],
-                //yes: 'hasOAPolicy',
-                next: 'kpnv_required'
-            },
-            {
-                label: 'kpnv_required',
-                type: 'decision',
-                text: [
-                    'Genügt anonyme',
-                    'Kontaktdatenerfassung?'
-                ],
-                no: 'luca_license',
-                yes: 'anonympossible'
-            },
-            {
-                label: 'anonympossible',
-                type: 'decision',
-                text: [
-                    'Hast Du vorher',
-                    'Luca genutzt?'
-                ],
-                no: 'usecwa'
-            },{
-                label: 'luca_license',
-                type: 'decision',
-                text: [
-                    'Hat Dein Gesundheitsamt',
-                    'eine Luca-Lizenz?'
-                ],
-                no: 'no_luca_license',
-                yes: 'yes_luca_license'
-            },
-            {
-                label: 'no_luca_license',
-                type: 'finish',
-                text: [
-                    'Nutze handschriftliche',
-                    'Kontaktdatenformulare o.',
-                    'alternative Apps'
-                ]
-            },{
-                label: 'prevluca',
-                type: 'process',
-                text: [
-                    'Lösche Deine Location',
-                    'bei Luca, entferne Luca-',
-                    'QR-Codes.'
-                ],
-                next: 'usecwa'
-            },{
-                label: 'usecwa',
-                type: 'finish',
-                text: [
-                    'Erstelle QR-Codes für',
-                    'die Corona-Warn-App',
-                    'und nutze diese. Entferne',
-                    'bestehende Luca-QR-Codes.'
-                ]
-            },{
-                label: 'yes_luca_license',
-                type: 'finish',
-                text: [
-                    'Erstelle QR-Codes für',
-                    'die Luca-App.',
-                    'Achte darauf, dass die',
-                    'Kompatibilität mit der',
-                    'Corona-Warn-App aktiv ist.'
-                ]
-
-            }
-        ]);*/
+    }); 
 })(); 

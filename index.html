@@ -95,6 +95,9 @@
                                 App schließen, App löschen / deinstallieren
                             </li>
                         </ol>
+                        <small>
+                            Wenn Du Deine App bereits gelöscht hast, <i>ohne vorher Deinen Account zu löschen</i>, dann kannst Du Deine Nutzer-Daten nicht mehr selbst löschen. Luca selbst sollten die Daten auch nur verschlüsselt vorliegen, aber sicherheitshalber kannst Du nachfragen und um Löschung Deiner Daten bitten (beachte, dass ein Antrag auf Löschung gemäß DSGVO potenziell länger gespeichert wird als Deine Check-Ins etc.). 
+                        </small>
                         <br><br>
                     </li>
                     <li>
@@ -115,7 +118,35 @@
                 </ul>
                 <button type="button" class="btn btn-outline-secondary" onClick='window.open("https://coronawarn.app", "_blank");'>🦠 Zur Corona-Warn-App</button>
                 <button type="button" class="btn btn-outline-secondary" onClick='window.open("mailto:privacy@culture4life.de?subject=L%C3%B6schung%20meiner%20Daten%20(Schl%C3%BCsselanh%C3%A4nger%20XXXX-XXXX-XXXX)&body=Hallo%2C%0D%0A%0D%0Abitte%20l%C3%B6schen%20Sie%20meine%20Kontaktdaten%2C%20die%20ich%20bei%20der%20Registrierung%20meines%20Schl%C3%BCsselanh%C3%A4ngers%20hinterlegt%20habe.%0D%0ASeriennummer%3A%20XXXX-XXXX-XXXX%0D%0A%0D%0ABesten%20Dank.", "_blank");'><i class="bi bi-envelope"></i> Schlüsselanhänger: Löschanfrage an Luca senden</button>
-                <br><br><br>
+                <br><br>
+                <div class="accordion" id="accordionSummary">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingAvailCheck">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAvailCheck" aria-expanded="false" aria-controls="collapseAvailCheck">
+                                <b>Status in meinem Kreis prüfen</b>
+                            </button>
+                        </h2>
+                        <div id="collapseAvailCheck" class="accordion-collapse" aria-labelledby="headingAvailCheck" data-bs-parent="#accordionSummary">
+                            <div class="accordion-body">
+                                Gesundheitsamt / PLZ: <input type="text" id="hdsupport_searchterm">
+
+                                <table class="table" id="hdsupport_table">
+                                    <thead>
+                                        <th>Gesundheitsamt</th>
+                                        <th>Anbindung laut Luca-Webseite</th>
+                                        <th>Beschreibung</th>
+                                        <th>Aktionen</th>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                                <small>
+                                    Die hier angezeigten Daten basieren auf den Postleitzahlen, die Luca auf seiner Webseite als "angebunden" ausweist. Die Postleitzahlen werden mithilfe von Daten des Statistischen Bundesamts (DESTATIS) mit Landkreisen verknüpft (Stand: 31.12.2021). Die Zuständigkeit der Gesundheitsämter wird über das <a href="https://tools.rki.de/PLZTool/" target="_blank">RKI-PLZ-Tool</a> ermittelt. Die Buttons öffnen eine Vorlage für eine Informationsfreiheitsanfrage via Frag den Staat. Gab es dort bereits eine Anfrage, wird Dir ein Button zum Ergebnis der Anfrage angezeigt (grün). 
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br><br>
 
                 <!--
                     BETREIBER:INNEN
@@ -208,33 +239,7 @@
                         <b>Die Kommunen</b> sollten informiert werden, damit sie keine Schlüsselanhänger mehr ausgeben, wenn diese sowieso nicht mehr genutzt werden.
                     </li>
                 </ul>
-                <div class="accordion" id="accordionSummary">
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingAvailCheck">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAvailCheck" aria-expanded="false" aria-controls="collapseAvailCheck">
-                                <b>Status in meinem Kreis prüfen</b>
-                            </button>
-                        </h2>
-                        <div id="collapseAvailCheck" class="accordion-collapse collapse" aria-labelledby="headingAvailCheck" data-bs-parent="#accordionSummary">
-                            <div class="accordion-body">
-
-                                Land-/Stadtkreis: <input type="text" id="lsupport_searchterm">
-
-                                <table class="table" id="lsupport_table">
-                                    <thead>
-                                        <th>Kreis</th>
-                                        <th>Anbindung laut Luca-Webseite</th>
-                                        <th>Bemerkung</th>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
-                                <small>
-                                    Die hier angezeigten Daten basieren auf den Postleitzahlen, die Luca auf seiner Webseite als "angebunden" ausweist. Die Postleitzahlen werden mithilfe von Daten des Statistischen Bundesamts (DESTATIS) mit Landkreisen verknüpft (Stand: 31.12.2021). 
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                
                 <br><br>
                 
                 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
