@@ -98,7 +98,7 @@
     $fds_departments = []; 
     $fds_departments_by_id = []; 
     do {
-        $res = cachedWebRequest("https://fragdenstaat.de/api/v1/publicbody/?limit=".$limit."&classification=136&offset=".$offset."&category=8", "fds");
+        $res = cachedWebRequest("https://fragdenstaat.de/api/v1/publicbody/?limit=".$limit."&classification=136&offset=".$offset."&category=8", "fds", 7*24*60*60);
         $res = json_decode($res, true);
         $offset += $limit;
         foreach ($res["objects"] as $object){
@@ -115,7 +115,7 @@
 
         $offset = 0; $limit = 50; 
         do {
-            $res = cachedWebRequest("https://fragdenstaat.de/api/v1/request/?limit=".$limit."&offset=".$offset."&tags=".$tag, "fds", 60*60*2);
+            $res = cachedWebRequest("https://fragdenstaat.de/api/v1/request/?limit=".$limit."&offset=".$offset."&tags=".$tag, "fds", 0);
             $res = json_decode($res, true);
             $offset += $limit;
             foreach ($res["objects"] as $object){
@@ -270,6 +270,16 @@
         $res["data"][] = $health_department; 
     }
 
-    file_put_contents(__DIR__."/health_departments.json", json_encode($res, JSON_PRETTY_PRINT));
+    file_put_contents(__DIR__."/health_departments.json", json_encode($res));
+
+    // CSV-Export for FDS - https://twitter.com/fragdenstaat/status/1488101248003973123
+    $csv = array();
+    $csv[] = implode(";", array("code", "fds_id", "zip_codes")); 
+    foreach ($health_departments as $hd){
+        if (!$hd["fds"]) continue;
+        $csv[] = implode(";", array($hd["code"], $hd["fds"]["id"], implode(",",$hd["zips"]))); 
+    }
+    $csv = implode("\n", $csv);
+    file_put_contents(__DIR__.'/health_departments.csv', $csv);
 
 ?>

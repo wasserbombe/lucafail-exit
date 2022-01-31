@@ -54,16 +54,24 @@
 
                     var $actiontd = $("<td>");
                     if (department.fds && department.fds.id){
+                        // lucaexit-missbrauch_kpnv
                         if (department.fds_requests && department.fds_requests["lucaexit-missbrauch_kpnv"] && department.fds_requests["lucaexit-missbrauch_kpnv"].length > 0){
-                            var $btn_missbrauch_response = $("<button>").addClass("btn btn-success btn-sm").html("<small>Antwort: Daten-Missbrauch?</small>");
                             var request = department.fds_requests["lucaexit-missbrauch_kpnv"][0];
-                            $btn_missbrauch_response.click(function(){
-                                var fds_url = "https://fragdenstaat.de"+request.url;
+                            var $btn_request = $("<button>");
+                            if (request.resolution == "successful"){
+                                $btn_request.addClass("btn btn-success btn-sm").html("<small>Antwort: Daten-Missbrauch?</small>");
+                            
+                                
+                            } else {
+                                $btn_request.addClass("btn btn-outline-secondary btn-sm").html("<small>Laufende Anfrage: Daten-Missbrauch?</small>");
+                            }
+                            $btn_request.click(function(){
+                                var fds_url = "https://fragdenstaat.de"+request.url+"?pk_campaign=lucaexit";
 
                                 window.open(fds_url, "_blank");
                             });
 
-                            $actiontd.append($btn_missbrauch_response);
+                            $actiontd.append($btn_request);
                         } else {
                             var fds_txt_missbrauch = [
                                 'Vor dem Hintergrund, dass es in Mainz (vgl. https://www.swr.de/swraktuell/rheinland-pfalz/mainz/polizei-ermittelt-ohne-rechtsgrundlage-mit-daten-aus-luca-app-100.html) und in Heilbronn (vgl. https://www.stimme.de/regional/region/polizei-wollte-luca-daten-haben-art-4581945) Anfragen an Landratsämter/Gesundheitsämter nach Informationen aus der Corona-Kontaktnachverfolgung gab:',
@@ -86,7 +94,7 @@
                                                 +"?subject="+encodeURIComponent(department.name + ": Nutzung von Kontaktnachverfolgungsdaten zu anderen Zwecken als dem Infektionsschutz")
                                                 +"&body="+encodeURIComponent(fds_txt_missbrauch.join("\r\n"))
                                                 +"&tags="+encodeURIComponent("luca-app,lucaexit-missbrauch_kpnv,kontaktnachverfolgung")
-                                                +"&hide_similar=1&hide_public=1&hide_editing=1";
+                                                +"&hide_similar=1&hide_public=1&hide_editing=1&pk_campaign=lucaexit";
                                                 ;
 
                                 window.open(fds_url, "_blank");
@@ -95,38 +103,59 @@
                             $actiontd.append($btn_frag_missbrauch);
                         }
 
-                        var fds_txt_status = [
-                            'Informationen über die aktuelle Nutzung des Luca-Systems in Ihrer Behörde, insbesondere:',
-                            '- Ist Ihre Behörde derzeit an das Luca-System angebunden? Wenn ja, seit wann und bis wann?',
-                            '- Nutzt Ihre Behörde das Luca-System? Wenn ja, für was (Kontaktnachverfolgung bzw. -ermittlung, "Warnungen", ...)? ',
-                            '- Wie viele Kontaktnachverfolgungen wurden in den letzten 3 bzw. 6 Monaten via Luca durchgeführt (bitte einzeln beantworten)?',
-                            '- Ist eine weitere Nutzung des Luca-System durch das Bundesland vorgesehen? Falls nein, ziehen Sie einen eigenen Vertrag mit Luca in Betracht?',
-                            '- Wäre eine Nutzung von Luca Connect in Ihrem Amt derzeit möglich?',
-                            '- Wie oft wurde Luca Connect bzw. die dazugehörigen Features von Ihnen bereits genutzt?',
-                            ''
-                        ];
-
-                        if (pct > 0){
-                            fds_txt_status.push('Die Webseite von Luca gibt an, dass folgende Postleitzahlen von Ihrer Behörde angebunden sind: ' + department.zips_supported.join(', ') + ' - d.h., dass Sie dort mithilfe des Luca-Systems eine Kontaktnachverfolgung durchführen. Entspricht das der Realität, d.h. können Luca-Nutzer in diesem Gebiet sich darauf verlassen, dass Sie - sollte es sich um eine Luca-Location handeln - sie darauf hinweisen, dass Sie möglicherweise Kontakt mit einer infizierten Person hatten?');
-                            if (pct < 1){
-                                fds_txt_status.push('Die Luca-Webseite gibt darüber hinaus an, dass folgende Postleitzahlen nicht angebunden sind: ' + department.zips_not_supported.join(', ') + ' - ist das richtig?'); 
+                        // lucaexit-nutzungsstatus
+                        if (department.fds_requests && department.fds_requests["lucaexit-nutzungsstatus"] && department.fds_requests["lucaexit-nutzungsstatus"].length > 0){
+                            var request = department.fds_requests["lucaexit-nutzungsstatus"][0];
+                            var $btn_request = $("<button>");
+                            if (request.resolution == "successful"){
+                                $btn_request.addClass("btn btn-success btn-sm").html("<small>Antwort: Luca-Nutzung</small>");
+                            
+                                
+                            } else {
+                                $btn_request.addClass("btn btn-outline-secondary btn-sm").html("<small>Laufende Anfrage: Luca-Nutzung</small>");
                             }
+                            $btn_request.click(function(){
+                                var fds_url = "https://fragdenstaat.de"+request.url+'?pk_campaign=lucaexit';
+
+                                window.open(fds_url, "_blank");
+                            });
+
+                            $actiontd.append($btn_request);
                         } else {
-                            fds_txt_status.push('Die Webseite von Luca gibt an, dass derzeit kein von Ihnen betreuter Bereich ans Luca-System angeschlossen ist. Ist das richtig?');
+                            var fds_txt_status = [
+                                'Informationen über die aktuelle Nutzung des Luca-Systems in Ihrer Behörde, insbesondere:',
+                                '- Ist Ihre Behörde derzeit an das Luca-System angebunden? Wenn ja, seit wann und bis wann?',
+                                '- Nutzt Ihre Behörde das Luca-System? Wenn ja, für was (Kontaktnachverfolgung bzw. -ermittlung, "Warnungen", ...)? ',
+                                '- Sollte Ihre Behörde derzeit keine Kontaktnachverfolgung (mehr) durchführen: Wurden Luca-Locations darüber informiert, dass eine Kontaktdatenerfassung damit nutzlos ist bzw. wurden die Luca-Nutzer darüber benachrichtigt, dass sie im Infektionsfall nicht mehr von Ihnen via Luca-App informiert werden?',
+                                '- Wie viele Kontaktnachverfolgungen wurden in den letzten 3 bzw. 6 Monaten via Luca durchgeführt (bitte einzeln beantworten)?',
+                                '- Ist eine weitere Nutzung des Luca-System durch das Bundesland vorgesehen? Falls nein, ziehen Sie einen eigenen Vertrag mit Luca in Betracht?',
+                                '- Wäre eine Nutzung von Luca Connect in Ihrem Amt derzeit möglich?',
+                                '- Wie oft wurde Luca Connect bzw. die dazugehörigen Features von Ihnen bereits genutzt?',
+                                
+                            ];
+
+                            if (pct > 0){
+                                fds_txt_status.push('Die Webseite von Luca gibt an, dass folgende Postleitzahlen von Ihrer Behörde angebunden sind: ' + department.zips_supported.join(', ') + ' - d.h., dass Sie dort mithilfe des Luca-Systems eine Kontaktnachverfolgung durchführen. Entspricht das der Realität, d.h. können Luca-Nutzer in diesem Gebiet sich darauf verlassen, dass Sie - sollte es sich um eine Luca-Location handeln - sie darauf hinweisen, dass Sie möglicherweise Kontakt mit einer infizierten Person hatten?');
+                                if (pct < 1){
+                                    fds_txt_status.push('Die Luca-Webseite gibt darüber hinaus an, dass folgende Postleitzahlen nicht angebunden sind: ' + department.zips_not_supported.join(', ') + ' - ist das richtig?'); 
+                                }
+                            } else {
+                                fds_txt_status.push('Die Webseite von Luca gibt an, dass derzeit kein von Ihnen betreuter Bereich ans Luca-System angeschlossen ist. Ist das richtig?');
+                            }
+
+                            var $btn_frag_status = $("<button>").addClass("btn btn-primary btn-sm").html("<small>Frag nach Luca-Status!</small>");
+                            $btn_frag_status.click(function(){
+                                var fds_url = "https://fragdenstaat.de/anfrage-stellen/an/"+department.fds.slug+"/"
+                                                +"?subject="+encodeURIComponent(department.name + ": Aktuelle Nutzung des Luca-Systems in Ihrer Behörde")
+                                                +"&body="+encodeURIComponent(fds_txt_status.join("\r\n"))
+                                                +"&tags="+encodeURIComponent("luca-app,lucaexit-nutzungsstatus")
+                                                +"&hide_similar=1&hide_public=1&hide_editing=1&pk_campaign=lucaexit";
+                                                ;
+
+                                window.open(fds_url, "_blank");
+                            });
+                            $actiontd.append($btn_frag_status);
                         }
-
-                        var $btn_frag_status = $("<button>").addClass("btn btn-primary btn-sm").html("<small>Frag nach Luca-Status!</small>");
-                        $btn_frag_status.click(function(){
-                            var fds_url = "https://fragdenstaat.de/anfrage-stellen/an/"+department.fds.slug+"/"
-                                            +"?subject="+encodeURIComponent(department.name + ": Aktuelle Nutzung des Luca-Systems in Ihrer Behörde")
-                                            +"&body="+encodeURIComponent(fds_txt_status.join("\r\n"))
-                                            +"&tags="+encodeURIComponent("luca-app,lucaexit-nutzungsstatus")
-                                            +"&hide_similar=1&hide_public=1&hide_editing=1";
-                                            ;
-
-                            window.open(fds_url, "_blank");
-                        });
-                        $actiontd.append($btn_frag_status);
                     }
                     $tr.append($actiontd);
                     
