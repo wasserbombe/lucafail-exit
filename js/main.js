@@ -1,5 +1,5 @@
 (function(){
-    $.ajax({
+    /*$.ajax({
         "url": "/api/flowchart_betreiberinnen.txt",
         "success": function(data){
             var diagram = flowchart.parse(data);
@@ -11,7 +11,7 @@
                 }
             );
         }
-    });
+    });*/
 
     var healthDepartments = []; 
     $.ajax({
@@ -56,9 +56,9 @@
                     if (department.fds && department.fds.id){
                         // lucaexit-missbrauch_kpnv
                         if (department.fds_requests && department.fds_requests["lucaexit-missbrauch_kpnv"] && department.fds_requests["lucaexit-missbrauch_kpnv"].length > 0){
-                            var request = department.fds_requests["lucaexit-missbrauch_kpnv"][0];
+                            var requestMissbrauch = department.fds_requests["lucaexit-missbrauch_kpnv"][0];
                             var $btn_request = $("<button>");
-                            if (request.resolution == "successful"){
+                            if (requestMissbrauch.resolution == "successful"){
                                 $btn_request.addClass("btn btn-success btn-sm").html("<small>Antwort: Daten-Missbrauch?</small>");
                             
                                 
@@ -66,7 +66,7 @@
                                 $btn_request.addClass("btn btn-outline-secondary btn-sm").html("<small>Laufende Anfrage: Daten-Missbrauch?</small>");
                             }
                             $btn_request.click(function(){
-                                var fds_url = "https://fragdenstaat.de"+request.url+"?pk_campaign=lucaexit";
+                                var fds_url = "https://fragdenstaat.de"+requestMissbrauch.url+"?pk_campaign=lucaexit";
 
                                 window.open(fds_url, "_blank");
                             });
