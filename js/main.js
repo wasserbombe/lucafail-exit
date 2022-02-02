@@ -85,7 +85,10 @@
                                 '- Daten/Anfragen, die sich auf die Luca-App beziehen (weil darüber erfasst oder explizit danach gefragt)',
                                 '- Daten/Anfragen, die sich NICHT auf Luca beziehen (weil nicht darüber erfasst)',
                                 'beide Punkte untergliedert nach',
-                                '- Herkunft der Anfrage (Amt, Behörde, etc.)'
+                                '- Herkunft der Anfrage (Amt, Behörde, etc.)',
+                                '',
+                                '(bitte antworten Sie OBERHALB dieser E-Mail - vielen Dank!)',
+                                ''
                             ];
 
                             var $btn_frag_missbrauch = $("<button>").addClass("btn btn-primary btn-sm").html("<small>Frag nach Daten-Missbrauch!</small>");
@@ -131,7 +134,9 @@
                                 '- Ist eine weitere Nutzung des Luca-System durch das Bundesland vorgesehen? Falls nein, ziehen Sie einen eigenen Vertrag mit Luca in Betracht?',
                                 '- Wäre eine Nutzung von Luca Connect in Ihrem Amt derzeit möglich?',
                                 '- Wie oft wurde Luca Connect bzw. die dazugehörigen Features von Ihnen bereits genutzt?',
-                                
+                                '',
+                                '(bitte antworten Sie OBERHALB dieser E-Mail - vielen Dank!)',
+                                ''
                             ];
 
                             if (pct > 0){
