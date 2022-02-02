@@ -147,6 +147,19 @@
         );
     }
 
+    $kreiseRAW = file_get_contents(__DIR__.'/data/kreise.tsv');
+    $kreis2kreisschluessel = $kreisschluessel2kreis = array();
+
+    foreach (explode("\n", $kreiseRAW) as $line) {
+        $line = trim($line);
+        if (empty($line)) continue;
+        $parts = explode("\t", $line);
+
+        if (strlen($parts[0]) != 5 || strlen($parts[2]) < 3) continue;
+        $kreis2kreisschluessel[$parts[2]] = $parts[0];
+        $kreisschluessel2kreis[$parts[0]] = array("name" => $parts[2], "zips" => array(), "supportedZIPs" => array(), "unsupportedZIPs" => array());
+    }
+
     // use RKI tool to get health departments based on ZIP of towns
     $hd_found_for = array(); 
     $zips = $supportedZIPs; 
@@ -176,7 +189,8 @@
                 "name" => "null",
                 "zips" => $matches[1],
                 "zips_supported" => array(),
-                "zips_not_supported" => array()
+                "zips_not_supported" => array(),
+                "kreise" => array()
             );
             foreach ($hd["zips"] as $z => $zip){
                 if (in_array($zip, $supportedZIPs)){
@@ -186,6 +200,16 @@
                 }
             }
             $hd["zips"] = array_merge($hd["zips_supported"], $hd["zips_not_supported"]);
+            $kschluessel_there = []; 
+            foreach ($hd["zips"] as $z => $zip){
+                if (isset($gemeinden[$zip]) && !in_array($gemeinden[$zip]["kreisschluessel"], $kschluessel_there)){
+                    $kschluessel_there[] = $gemeinden[$zip]["kreisschluessel"];
+                    $hd["kreise"][] = array(
+                        "kschluessel" => $gemeinden[$zip]["kreisschluessel"],
+                        "kreisname" => $kreisschluessel2kreis[$gemeinden[$zip]["kreisschluessel"]]["name"]
+                    );
+                }
+            }
             
             // get identifier and name
             $select = $doc->getElementById("SelectedAddress_Code");
@@ -270,7 +294,7 @@
         $res["data"][] = $health_department; 
     }
 
-    file_put_contents(__DIR__."/health_departments.json", json_encode($res));
+    file_put_contents(__DIR__."/health_departments.json", json_encode($res, JSON_PRETTY_PRINT));
 
     // CSV-Export for FDS - https://twitter.com/fragdenstaat/status/1488101248003973123
     $csv = array();

@@ -1,4 +1,149 @@
 (function(){
+    var request_types_friendly_names = {
+        "lucaexit-missbrauch_kpnv": "Zweckentfremdung Kontaktdaten",
+        "lucaexit-nutzungsstatus": "Nutzungsstatus Luca"
+    };
+    /**
+     * MAP
+     */
+     $("#results_type a").on("click", function (){
+        var resulttype = $(this).data("resulttype");
+        $("#results_type a").attr("class", "btn btn-outline-primary");
+        $("#results_type a[data-resulttype=" + resulttype + "]").removeClass("btn-outline-primary").addClass("btn-primary").addClass("active");
+    });
+
+    var mymap = L.map('map_container', {
+        fullscreenControl: false
+    }).setView([51.3, 8.9], 6); 
+
+    L.tileLayer('/osmtiles/tile.php?s={s}&z={z}&x={x}&y={y}', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(mymap);
+
+    var kreislayer = L.geoJSON(kreise_geojson, {
+        onEachFeature: function (feature, layer){
+            var content = []; 
+            content.push("<b>" + feature.properties.local_name + "</b>");
+            content.push(feature.properties.all_tags["name:prefix"]);
+            content.push(feature.properties.all_tags["de:regionalschluessel"]);
+            /*if (typeof federalStatesDetails[feature.properties.id] !== "undefined") {
+                var details = federalStatesDetails[feature.properties.id];
+                if (details.description !== "") {
+                    content.push(details.description);
+                }
+                if (details.sources && details.sources.length > 0){
+                    content.push('<u>Quelle(n):</u> '); 
+                    var $ul = $("<ul>");
+                    details.sources.forEach((source) => {
+                        if (source.url){
+                            $ul.append($("<li>").html("<a href='" + source.url + "'>" + source.text + "</a>"));
+                        } else {
+                            $ul.append($("<li>").html(source.text));
+                        }
+                    });
+                    content.push($ul.html()); 
+                }
+                if (details.updated){
+                    content.push('<small>Stand: ' + details.updated + '</small>');
+                }
+            }*/
+            content = content.join("<br>");
+            layer.bindPopup(content);
+        },
+        style: function(feature) {
+            if (feature.properties.NAME_3 === "Rhein-Neckar-Kreis") {
+                console.log(feature); 
+            }
+            if (feature.properties.all_tags["de:regionalschluessel"]){
+                return {
+                    color: '#f00',
+                    weight: 1,
+                    opacity: 0.5
+                };
+            } else {
+                return {
+                    color: '#888',
+                    weight: 1,
+                    opacity: 0.3
+                };
+            }
+        },
+        filter: function(feature, layer) {
+            return !!feature.properties.all_tags["de:regionalschluessel"];
+        }
+    
+    }).addTo(mymap);
+
+    var refreshMapContent = () => {
+        var rtype = $("#results_type a.active").data("resulttype");
+        console.log("Type: ", rtype); 
+        kreislayer.eachLayer(function(layer) {
+            var content = []; 
+            content.push("<b>" + layer.feature.properties.local_name + "</b>");
+            content.push(layer.feature.properties.all_tags["de:regionalschluessel"]);
+
+            var kschluessel = String(layer.feature.properties.all_tags["de:regionalschluessel"]).substring(0,5);
+            var amt = null; 
+            healthDepartments.forEach((department) => {
+
+                department.kreise.forEach((kreis) => {
+                    if (kreis.kschluessel == kschluessel){
+                        amt = department; 
+                    }
+                });
+            });
+
+            if (amt){
+                content.push("Zuständiges Gesundheitsamt: "+amt.name + (amt.name_addition?" ("+amt.name_addition+")":""));
+                var requests_todo = Object.keys(amt.fds_requests).length;
+                var requests_done = 0; 
+                for (var rtype in amt.fds_requests){
+                    if (amt.fds_requests.hasOwnProperty(rtype)){
+                        if (amt.fds_requests[rtype].length > 0) {
+                            requests_done++; 
+                            if (request_types_friendly_names[rtype]){
+                                var request = amt.fds_requests[rtype][0]; 
+                                content.push('✔️ <a href="https://fragdenstaat.de'+request.url+'" target="_blank">' + request_types_friendly_names[rtype] + '</a>');
+                            } else {
+                                content.push("✔️ " + rtype);
+                            }
+                            
+                        } else {
+                            if (request_types_friendly_names[rtype]){
+                                content.push("❌ " + request_types_friendly_names[rtype]);
+                            } else {
+                                content.push("❌ " + rtype);
+                            }
+                        }
+                    }
+                }
+                if (requests_done < requests_todo){
+                    content.push("Du kannst die restlichen Anfragen über die Suche oben an das Gesundheitsamt richten.")
+                }
+
+                var min = 0.2, max = 0.7; 
+                if (requests_done == 0){
+                    layer.setStyle({color: "#8b0000", fillOpacity: max});
+                } else {
+                    
+                    var per_request = (max-min)/requests_todo; 
+                    var opacity = min + (requests_done*per_request);
+
+                    if (requests_done != 2) console.log("opacity", opacity); 
+
+                    layer.setStyle({color: "#006400", fillOpacity: opacity});
+                }
+            } else {
+                content.push("Uns fehlt aktuell die Zuordnung zu einem Gesundheitsamt für diesen Kreis."); 
+            }
+            content = content.join("<br>");
+            layer.bindPopup(content);
+        });
+    };
+    
+      
+
+
     /*$.ajax({
         "url": "/api/flowchart_betreiberinnen.txt",
         "success": function(data){
@@ -18,6 +163,9 @@
         "url": "/api/health_departments.json",
         "success": function(data){
             healthDepartments = data.data;
+        },
+        "complete": function (data){
+            refreshMapContent(); 
         }
     });
     $("#hdsupport_searchterm").on("keyup", function(){

@@ -53,6 +53,15 @@ div.quote-origin {
     color: white; 
 }
 
-.btn {
+button.btn {
     margin: 5px;
+}
+
+/* MAP */
+#map_container {
+    height: 600px; 
+}
+#results_type {
+    margin-top: 10px;
+    margin-left: 20px;
 }
