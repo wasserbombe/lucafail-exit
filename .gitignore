@@ -10,3 +10,4 @@ config/*
 robots.txt
 api/health_departments.csv
 osmtiles/cache/*
+_archive/*

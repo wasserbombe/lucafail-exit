@@ -14,7 +14,9 @@
         var text = ""; 
         if ($(this).hasClass("scenario-field-cwa")){
             warnedPersons = $(this).parent().find(".scenario-field-cwa").length-1; 
-            $(this).parent().find(".scenario-field-cwa:not(.warner)").addClass("warned");
+            $(this).parent().find(".scenario-field-cwa:not(.warner)").each((e, elem) => {
+                $(elem).addClass((Math.floor(Math.random()*10)%4 == 0)?"warned-green":"warned");
+            });
             text = "Ein CWA-Nutzer hat sich mit dem Corona-Virus infiziert.";
         } else {
             text = "Ein Luca-Nutzer hat sich mit dem Corona-Virus infiziert.";
@@ -31,7 +33,7 @@
     }); 
 
     $("div.scenario .scenario-field").on("mouseout", function(){
-        $("div.scenario .scenario-field").removeClass("warned").removeClass("warner"); 
+        $("div.scenario .scenario-field").removeClass("warned").removeClass("warner").removeClass("warned-green"); 
         $("div.scenario .scenario-info").text("Kein Infektionsfall");
     }); 
 
@@ -80,7 +82,18 @@
             }
         },
         filter: function(feature, layer) {
-            return !!feature.properties.all_tags["de:regionalschluessel"];
+            var take = !!feature.properties.all_tags["de:regionalschluessel"];
+
+            // HAMBURG 
+            // admin_level": "9", "name:prefix": "Stadtbezirk
+            if (!take && feature.properties.all_tags.admin_level === "9" && feature.properties.all_tags["name:prefix"] === "Stadtbezirk") {
+                take = true;
+            }
+
+            if (!take){
+                console.log("ignored", feature.properties.name);
+            }
+            return take; 
         }
     
     }).addTo(mymap);
