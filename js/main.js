@@ -21,7 +21,7 @@
         }
 
         var pct = warnedPersons / ($(this).parent().find(".scenario-field").length-1) * 100;
-        text += " " + warnedPersons + " Personen ("+(Math.round(pct * 10)/10)+"%) wurden gewarnt";
+        text += " " + warnedPersons + " andere Personen ("+(Math.round(pct * 10)/10)+"%) wurden gewarnt";
         if ($(this).hasClass("scenario-field-cwa")){
             text += ", da die Corona-Warn-App bei positivem Testergebnis automatisch und ohne Zutun eines Gesundheitsamtes warnt.";
         } else {
