@@ -4,6 +4,38 @@
         "lucaexit-nutzungsstatus": "Nutzungsstatus Luca"
     };
     /**
+     * Warning examples
+     */
+
+    $("div.scenario .scenario-info").text("Kein Infektionsfall");
+    $("div.scenario .scenario-field").on("mouseover", function(){
+        var warnedPersons = 0; 
+        $(this).addClass("warner");
+        var text = ""; 
+        if ($(this).hasClass("scenario-field-cwa")){
+            warnedPersons = $(this).parent().find(".scenario-field-cwa").length-1; 
+            $(this).parent().find(".scenario-field-cwa:not(.warner)").addClass("warned");
+            text = "Ein CWA-Nutzer hat sich mit dem Corona-Virus infiziert.";
+        } else {
+            text = "Ein Luca-Nutzer hat sich mit dem Corona-Virus infiziert.";
+        }
+
+        var pct = warnedPersons / ($(this).parent().find(".scenario-field").length-1) * 100;
+        text += " " + warnedPersons + " Personen ("+(Math.round(pct * 10)/10)+"%) wurden gewarnt";
+        if ($(this).hasClass("scenario-field-cwa")){
+            text += ", da die Corona-Warn-App bei positivem Testergebnis automatisch und ohne Zutun eines Gesundheitsamtes warnt.";
+        } else {
+            text += ", da die Luca-App nur bei Zutun eines Gesundheitsamtes warnt - die aber Luca-Daten nicht mehr auswerten können und daher nicht informieren.";
+        }
+        $(this).parent().find(".scenario-info").text(text); 
+    }); 
+
+    $("div.scenario .scenario-field").on("mouseout", function(){
+        $("div.scenario .scenario-field").removeClass("warned").removeClass("warner"); 
+        $("div.scenario .scenario-info").text("Kein Infektionsfall");
+    }); 
+
+    /**
      * MAP
      */
      $("#results_type a").on("click", function (){
@@ -26,27 +58,6 @@
             content.push("<b>" + feature.properties.local_name + "</b>");
             content.push(feature.properties.all_tags["name:prefix"]);
             content.push(feature.properties.all_tags["de:regionalschluessel"]);
-            /*if (typeof federalStatesDetails[feature.properties.id] !== "undefined") {
-                var details = federalStatesDetails[feature.properties.id];
-                if (details.description !== "") {
-                    content.push(details.description);
-                }
-                if (details.sources && details.sources.length > 0){
-                    content.push('<u>Quelle(n):</u> '); 
-                    var $ul = $("<ul>");
-                    details.sources.forEach((source) => {
-                        if (source.url){
-                            $ul.append($("<li>").html("<a href='" + source.url + "'>" + source.text + "</a>"));
-                        } else {
-                            $ul.append($("<li>").html(source.text));
-                        }
-                    });
-                    content.push($ul.html()); 
-                }
-                if (details.updated){
-                    content.push('<small>Stand: ' + details.updated + '</small>');
-                }
-            }*/
             content = content.join("<br>");
             layer.bindPopup(content);
         },
@@ -141,8 +152,6 @@
         });
     };
     
-      
-
 
     /*$.ajax({
         "url": "/api/flowchart_betreiberinnen.txt",

@@ -61,7 +61,31 @@ button.btn {
 #map_container {
     height: 600px; 
 }
-#results_type {
-    margin-top: 10px;
-    margin-left: 20px;
+
+/* Scenario */ 
+.scenario-field {
+    margin: 2px;
+    width: 30px; 
+    height: 30px; 
+    display: inline-block;
+}
+.scenario-info {
+    display:block;
+    margin: 5px;
+    font-size: smaller;
+}
+.scenario-field.scenario-field-luca {
+    background-color: #abb8c3;
+}
+.scenario-field.scenario-field-cwa {
+    background-image: linear-gradient(to right,#80cdec 29%,#c00f2d 126%,#c00f2d 126%);
+}
+.scenario-field.warned {
+    border: 2px solid darkred; 
+}
+.scenario-field.warner {
+    border: 3px dotted orange; 
+}
+.scenario-explain {
+    font-style: italic;
 }
