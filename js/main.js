@@ -48,11 +48,21 @@
 
     var mymap = L.map('map_container', {
         fullscreenControl: false
-    }).setView([51.3, 8.9], 6); 
+    }).setView([51.3, 10.5], 6); 
 
     L.tileLayer('/osmtiles/tile.php?s={s}&z={z}&x={x}&y={y}', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(mymap);
+
+    var legend = L.control({position: 'bottomleft'});
+    legend.onAdd = function (map) {
+        var div = L.DomUtil.create('div', 'info legend');
+        labels = ["<b>Legend</b>"];
+        labels.push('<i class="circle" style="background: #006400;"></i> Test');
+        div.innerHTML = labels.join('<br>');
+        return div;
+    };
+    legend.addTo(mymap);
 
     var kreislayer = L.geoJSON(kreise_geojson, {
         onEachFeature: function (feature, layer){
@@ -101,6 +111,7 @@
     var refreshMapContent = () => {
         var rtype = $("#results_type a.active").data("resulttype");
         console.log("Type: ", rtype); 
+        var count_one_request = count_two_requests = count_kreise = 0; 
         kreislayer.eachLayer(function(layer) {
             var content = []; 
             content.push("<b>" + layer.feature.properties.local_name + "</b>");
@@ -141,13 +152,16 @@
                         }
                     }
                 }
+                if (requests_done > 0) count_one_request++; 
+                if (requests_done > 1) count_two_requests++;
+                count_kreise++;
                 if (requests_done < requests_todo){
                     content.push("Du kannst die restlichen Anfragen über die Suche oben an das Gesundheitsamt richten.")
                 }
 
-                var min = 0.2, max = 0.7; 
+                var min = 0.2, max = 0.85; 
                 if (requests_done == 0){
-                    layer.setStyle({color: "#8b0000", fillOpacity: max});
+                    layer.setStyle({color: "black", fillOpacity: 0.2});
                 } else {
                     
                     var per_request = (max-min)/requests_todo; 
@@ -163,6 +177,20 @@
             content = content.join("<br>");
             layer.bindPopup(content);
         });
+
+        console.log("count_one_request", count_one_request);
+        console.log("count_two_requests", count_two_requests);
+        // aria-valuenow="9" aria-valuemin="0" aria-valuemax="16"
+        $("#progress_one_request")
+            .css("width", ((count_one_request-count_two_requests)/count_kreise*100)+"%")
+            .attr("aria-valuenow", count_one_request-count_two_requests)
+            .attr("aria-valuemin", 0)
+            .attr("aria-valuemax", count_kreise);
+        $("#progress_two_requests")
+            .css("width", (count_two_requests/count_kreise*100)+"%")
+            .attr("aria-valuenow", count_two_requests)
+            .attr("aria-valuemin", 0)
+            .attr("aria-valuemax", count_kreise);
     };
     
 
@@ -211,13 +239,13 @@
                     var text = ""; 
                     if (pct == 1){
                         angebunden_html = '<span class="badge-anonym badge-anonym-nie" title="'+((Math.round(pct_full * 100) / 100) + "%")+'">angebunden</span>';
-                        text = 'Laut Luca-Webseite ist dieses Gesundheitsamt angebunden und könnte eine Kontaktnachverfolgung über das Luca-System durchführen. Jedoch haben die meisten Gesundheitsämter die Kontaktnachverfolgung eingestellt, die meisten Bundesländer haben die Luca-Lizenz außerdem gekündigt.<br>Du solltest nachfragen, ob dieses Gesundheitsamt wirklich noch Luca nutzt, und falls nicht, das Gesundheitsamt auffordern, den Eintrag auf der Luca-Webseite ändern zu lassen und Betreiber:innen von Locations darüber zu benachrichtigen. Denn wenn das Gesundheitsamt nicht mehr Luca nutzt, dann ist es sinnlos, Luca als Betreiber:in oder Nutzer:in weiterhin zu nutzen. ';
+                        text = '<small>Laut Luca-Webseite ist dieses Gesundheitsamt angebunden und könnte eine Kontaktnachverfolgung über das Luca-System durchführen. Jedoch haben die meisten Gesundheitsämter die Kontaktnachverfolgung eingestellt, die meisten Bundesländer haben die Luca-Lizenz außerdem gekündigt.<br>Du solltest nachfragen, ob dieses Gesundheitsamt wirklich noch Luca nutzt, und falls nicht, das Gesundheitsamt auffordern, den Eintrag auf der Luca-Webseite ändern zu lassen und Betreiber:innen von Locations darüber zu benachrichtigen. Denn wenn das Gesundheitsamt nicht mehr Luca nutzt, dann ist es sinnlos, Luca als Betreiber:in oder Nutzer:in weiterhin zu nutzen.</small>';
                     } else if (pct == 0){
                         angebunden_html = '<span class="badge-anonym badge-anonym-immer" title="'+((Math.round(pct_full * 100) / 100) + "%")+'">nicht angebunden</span>';
-                        text = "Laut Luca-Webseite ist dieses Gesundheitsamt nicht angebunden. D.h. es wird keine Kontaktnachverfolgung über die Luca-App durchgeführt und es erfolgt keine Warnung zu einer möglichen Infektion über die Luca-App. Für Betreiber:innen als auch Nutzer:innen hat die Luca-App hier also keinen Nutzen. ";
+                        text = "<small>Laut Luca-Webseite ist dieses Gesundheitsamt nicht angebunden. D.h. es wird keine Kontaktnachverfolgung über die Luca-App durchgeführt und es erfolgt keine Warnung zu einer möglichen Infektion über die Luca-App. Für Betreiber:innen als auch Nutzer:innen hat die Luca-App hier also keinen Nutzen.</small>";
                     } else {
                         angebunden_html = '<span class="badge-anonym badge-anonym-meist" title="'+((Math.round(pct_full * 100) / 100) + "%")+'">teilw. angebunden?</span>';
-                        text = "❓ Nur ein Teil des Gebiets, für welches dieses Gesundheitsamt verantwortlich ist, ist laut Luca-Webseite angebunden. Es fehlen: "+ department.zips_not_supported.join(', ') + '.';
+                        text = "<small>❓ Nur ein Teil des Gebiets, für welches dieses Gesundheitsamt verantwortlich ist, ist laut Luca-Webseite angebunden. Es fehlen: "+ department.zips_not_supported.join(', ') + '.</small>';
                     }
                     $tr.append($("<td>").html(angebunden_html));
                     $tr.append($("<td>").html(text));
