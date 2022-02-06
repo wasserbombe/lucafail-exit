@@ -53,6 +53,78 @@ div.quote-origin {
     color: white; 
 }
 
-.btn {
+button.btn {
     margin: 5px;
+}
+
+/* MAP */
+#map_container {
+    height: 600px; 
+}
+
+/* Scenario */ 
+.scenario-field {
+    margin: 2px;
+    width: 30px; 
+    height: 30px; 
+    display: inline-block;
+}
+.scenario-field-example {
+    margin: 0px;
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+}
+.scenario-info {
+    display:block;
+    margin: 5px;
+    font-size: smaller;
+}
+.scenario-field-luca {
+    background-color: #abb8c3;
+}
+.scenario-field-cwa {
+    background-image: linear-gradient(to right,#80cdec 29%,#c00f2d 126%,#c00f2d 126%);
+}
+.scenario-field.warned {
+    border: 5px solid darkred; 
+
+    animation-name: blinking;
+    animation-duration: 1s;
+    animation-iteration-count: 100;
+  }
+@keyframes blinking {
+    0% {
+        border-color: transparent;
+    }
+    50% {
+        border-color: darkred;
+    }
+    100% {
+        border-color: transparent;
+    }
+}
+.scenario-field.warned-green {
+    border: 5px solid darkorange; 
+
+    animation-name: blinking-green;
+    animation-duration: 1s;
+    animation-iteration-count: 100;
+  }
+@keyframes blinking-green {
+    0% {
+        border-color: transparent;
+    }
+    50% {
+        border-color: darkorange;
+    }
+    100% {
+        border-color: transparent;
+    }
+}
+.scenario-field.warner {
+    border: 6px dotted orange; 
+}
+.scenario-explain {
+    font-style: italic;
 }

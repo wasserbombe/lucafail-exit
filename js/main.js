@@ -1,4 +1,199 @@
 (function(){
+    var request_types_friendly_names = {
+        "lucaexit-missbrauch_kpnv": "Zweckentfremdung Kontaktdaten",
+        "lucaexit-nutzungsstatus": "Nutzungsstatus Luca"
+    };
+    /**
+     * Warning examples
+     */
+
+    $("div.scenario .scenario-info").text("Kein Infektionsfall");
+    $("div.scenario .scenario-field").on("mouseover", function(){
+        var warnedPersons = 0; 
+        $(this).addClass("warner");
+        var text = ""; 
+        if ($(this).hasClass("scenario-field-cwa")){
+            warnedPersons = $(this).parent().find(".scenario-field-cwa").length-1; 
+            $(this).parent().find(".scenario-field-cwa:not(.warner)").each((e, elem) => {
+                $(elem).addClass((Math.floor(Math.random()*10)%4 == 0)?"warned-green":"warned");
+            });
+            text = "Ein CWA-Nutzer hat sich mit dem Corona-Virus infiziert.";
+        } else {
+            text = "Ein Luca-Nutzer hat sich mit dem Corona-Virus infiziert.";
+        }
+
+        var pct = warnedPersons / ($(this).parent().find(".scenario-field").length-1) * 100;
+        text += " " + warnedPersons + " andere Personen ("+(Math.round(pct * 10)/10)+"%) wurden gewarnt";
+        if ($(this).hasClass("scenario-field-cwa")){
+            text += ", da die Corona-Warn-App bei positivem Testergebnis automatisch und ohne Zutun eines Gesundheitsamtes warnt.";
+        } else {
+            text += ", da die Luca-App nur bei Zutun eines Gesundheitsamtes warnt - die aber Luca-Daten nicht mehr auswerten können und daher nicht informieren.";
+        }
+        $(this).parent().find(".scenario-info").text(text); 
+    }); 
+
+    $("div.scenario .scenario-field").on("mouseout", function(){
+        $("div.scenario .scenario-field").removeClass("warned").removeClass("warner").removeClass("warned-green"); 
+        $("div.scenario .scenario-info").text("Kein Infektionsfall");
+    }); 
+
+    /**
+     * MAP
+     */
+     $("#results_type a").on("click", function (){
+        var resulttype = $(this).data("resulttype");
+        $("#results_type a").attr("class", "btn btn-outline-primary");
+        $("#results_type a[data-resulttype=" + resulttype + "]").removeClass("btn-outline-primary").addClass("btn-primary").addClass("active");
+    });
+
+    var mymap = L.map('map_container', {
+        fullscreenControl: false
+    }).setView([51.3, 10.5], 6); 
+
+    L.tileLayer('/osmtiles/tile.php?s={s}&z={z}&x={x}&y={y}', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(mymap);
+
+    var legend = L.control({position: 'bottomleft'});
+    legend.onAdd = function (map) {
+        var div = L.DomUtil.create('div', 'info legend');
+        labels = ["<b>Legend</b>"];
+        labels.push('<i class="circle" style="background: #006400;"></i> Test');
+        div.innerHTML = labels.join('<br>');
+        return div;
+    };
+    legend.addTo(mymap);
+
+    var kreislayer = L.geoJSON(kreise_geojson, {
+        onEachFeature: function (feature, layer){
+            var content = []; 
+            content.push("<b>" + feature.properties.local_name + "</b>");
+            content.push(feature.properties.all_tags["name:prefix"]);
+            content.push(feature.properties.all_tags["de:regionalschluessel"]);
+            content = content.join("<br>");
+            layer.bindPopup(content);
+        },
+        style: function(feature) {
+            if (feature.properties.NAME_3 === "Rhein-Neckar-Kreis") {
+                console.log(feature); 
+            }
+            if (feature.properties.all_tags["de:regionalschluessel"]){
+                return {
+                    color: '#f00',
+                    weight: 1,
+                    opacity: 0.5
+                };
+            } else {
+                return {
+                    color: '#888',
+                    weight: 1,
+                    opacity: 0.3
+                };
+            }
+        },
+        filter: function(feature, layer) {
+            var take = !!feature.properties.all_tags["de:regionalschluessel"];
+
+            // HAMBURG 
+            // admin_level": "9", "name:prefix": "Stadtbezirk
+            if (!take && feature.properties.all_tags.admin_level === "9" && feature.properties.all_tags["name:prefix"] === "Stadtbezirk") {
+                take = true;
+            }
+
+            if (!take){
+                console.log("ignored", feature.properties.name);
+            }
+            return take; 
+        }
+    
+    }).addTo(mymap);
+
+    var refreshMapContent = () => {
+        var rtype = $("#results_type a.active").data("resulttype");
+        console.log("Type: ", rtype); 
+        var count_one_request = count_two_requests = count_kreise = 0; 
+        kreislayer.eachLayer(function(layer) {
+            var content = []; 
+            content.push("<b>" + layer.feature.properties.local_name + "</b>");
+            content.push(layer.feature.properties.all_tags["de:regionalschluessel"]);
+
+            var kschluessel = String(layer.feature.properties.all_tags["de:regionalschluessel"]).substring(0,5);
+            var amt = null; 
+            healthDepartments.forEach((department) => {
+
+                department.kreise.forEach((kreis) => {
+                    if (kreis.kschluessel == kschluessel){
+                        amt = department; 
+                    }
+                });
+            });
+
+            if (amt){
+                content.push("Zuständiges Gesundheitsamt: "+amt.name + (amt.name_addition?" ("+amt.name_addition+")":""));
+                var requests_todo = Object.keys(amt.fds_requests).length;
+                var requests_done = 0; 
+                for (var rtype in amt.fds_requests){
+                    if (amt.fds_requests.hasOwnProperty(rtype)){
+                        if (amt.fds_requests[rtype].length > 0) {
+                            requests_done++; 
+                            if (request_types_friendly_names[rtype]){
+                                var request = amt.fds_requests[rtype][0]; 
+                                content.push('✔️ <a href="https://fragdenstaat.de'+request.url+'" target="_blank">' + request_types_friendly_names[rtype] + '</a>');
+                            } else {
+                                content.push("✔️ " + rtype);
+                            }
+                            
+                        } else {
+                            if (request_types_friendly_names[rtype]){
+                                content.push("❌ " + request_types_friendly_names[rtype]);
+                            } else {
+                                content.push("❌ " + rtype);
+                            }
+                        }
+                    }
+                }
+                if (requests_done > 0) count_one_request++; 
+                if (requests_done > 1) count_two_requests++;
+                count_kreise++;
+                if (requests_done < requests_todo){
+                    content.push("Du kannst die restlichen Anfragen über die Suche oben an das Gesundheitsamt richten.")
+                }
+
+                var min = 0.2, max = 0.85; 
+                if (requests_done == 0){
+                    layer.setStyle({color: "black", fillOpacity: 0.2});
+                } else {
+                    
+                    var per_request = (max-min)/requests_todo; 
+                    var opacity = min + (requests_done*per_request);
+
+                    if (requests_done != 2) console.log("opacity", opacity); 
+
+                    layer.setStyle({color: "#006400", fillOpacity: opacity});
+                }
+            } else {
+                content.push("Uns fehlt aktuell die Zuordnung zu einem Gesundheitsamt für diesen Kreis."); 
+            }
+            content = content.join("<br>");
+            layer.bindPopup(content);
+        });
+
+        console.log("count_one_request", count_one_request);
+        console.log("count_two_requests", count_two_requests);
+        // aria-valuenow="9" aria-valuemin="0" aria-valuemax="16"
+        $("#progress_one_request")
+            .css("width", ((count_one_request-count_two_requests)/count_kreise*100)+"%")
+            .attr("aria-valuenow", count_one_request-count_two_requests)
+            .attr("aria-valuemin", 0)
+            .attr("aria-valuemax", count_kreise);
+        $("#progress_two_requests")
+            .css("width", (count_two_requests/count_kreise*100)+"%")
+            .attr("aria-valuenow", count_two_requests)
+            .attr("aria-valuemin", 0)
+            .attr("aria-valuemax", count_kreise);
+    };
+    
+
     /*$.ajax({
         "url": "/api/flowchart_betreiberinnen.txt",
         "success": function(data){
@@ -18,6 +213,9 @@
         "url": "/api/health_departments.json",
         "success": function(data){
             healthDepartments = data.data;
+        },
+        "complete": function (data){
+            refreshMapContent(); 
         }
     });
     $("#hdsupport_searchterm").on("keyup", function(){
@@ -41,13 +239,13 @@
                     var text = ""; 
                     if (pct == 1){
                         angebunden_html = '<span class="badge-anonym badge-anonym-nie" title="'+((Math.round(pct_full * 100) / 100) + "%")+'">angebunden</span>';
-                        text = 'Laut Luca-Webseite ist dieses Gesundheitsamt angebunden und könnte eine Kontaktnachverfolgung über das Luca-System durchführen. Jedoch haben die meisten Gesundheitsämter die Kontaktnachverfolgung eingestellt, die meisten Bundesländer haben die Luca-Lizenz außerdem gekündigt.<br>Du solltest nachfragen, ob dieses Gesundheitsamt wirklich noch Luca nutzt, und falls nicht, das Gesundheitsamt auffordern, den Eintrag auf der Luca-Webseite ändern zu lassen und Betreiber:innen von Locations darüber zu benachrichtigen. Denn wenn das Gesundheitsamt nicht mehr Luca nutzt, dann ist es sinnlos, Luca als Betreiber:in oder Nutzer:in weiterhin zu nutzen. ';
+                        text = '<small>Laut Luca-Webseite ist dieses Gesundheitsamt angebunden und könnte eine Kontaktnachverfolgung über das Luca-System durchführen. Jedoch haben die meisten Gesundheitsämter die Kontaktnachverfolgung eingestellt, die meisten Bundesländer haben die Luca-Lizenz außerdem gekündigt.<br>Du solltest nachfragen, ob dieses Gesundheitsamt wirklich noch Luca nutzt, und falls nicht, das Gesundheitsamt auffordern, den Eintrag auf der Luca-Webseite ändern zu lassen und Betreiber:innen von Locations darüber zu benachrichtigen. Denn wenn das Gesundheitsamt nicht mehr Luca nutzt, dann ist es sinnlos, Luca als Betreiber:in oder Nutzer:in weiterhin zu nutzen.</small>';
                     } else if (pct == 0){
                         angebunden_html = '<span class="badge-anonym badge-anonym-immer" title="'+((Math.round(pct_full * 100) / 100) + "%")+'">nicht angebunden</span>';
-                        text = "Laut Luca-Webseite ist dieses Gesundheitsamt nicht angebunden. D.h. es wird keine Kontaktnachverfolgung über die Luca-App durchgeführt und es erfolgt keine Warnung zu einer möglichen Infektion über die Luca-App. Für Betreiber:innen als auch Nutzer:innen hat die Luca-App hier also keinen Nutzen. ";
+                        text = "<small>Laut Luca-Webseite ist dieses Gesundheitsamt nicht angebunden. D.h. es wird keine Kontaktnachverfolgung über die Luca-App durchgeführt und es erfolgt keine Warnung zu einer möglichen Infektion über die Luca-App. Für Betreiber:innen als auch Nutzer:innen hat die Luca-App hier also keinen Nutzen.</small>";
                     } else {
                         angebunden_html = '<span class="badge-anonym badge-anonym-meist" title="'+((Math.round(pct_full * 100) / 100) + "%")+'">teilw. angebunden?</span>';
-                        text = "❓ Nur ein Teil des Gebiets, für welches dieses Gesundheitsamt verantwortlich ist, ist laut Luca-Webseite angebunden. Es fehlen: "+ department.zips_not_supported.join(', ') + '.';
+                        text = "<small>❓ Nur ein Teil des Gebiets, für welches dieses Gesundheitsamt verantwortlich ist, ist laut Luca-Webseite angebunden. Es fehlen: "+ department.zips_not_supported.join(', ') + '.</small>';
                     }
                     $tr.append($("<td>").html(angebunden_html));
                     $tr.append($("<td>").html(text));

@@ -7,6 +7,8 @@
         <link href="css/main.css" rel="stylesheet">
         <link rel="stylesheet" href="/css/bootstrap.min.css">
         <link rel="stylesheet" href="/css/bootstrap-icons/bootstrap-icons.css">
+        <link rel="stylesheet" href="/osmtiles/leaflet/leaflet.css">
+        <link rel="stylesheet" href="/osmtiles/leaflet/leaflet.fullscreen.css">
 
         <title>Ausstieg aus der Luca-App</title>
 
@@ -157,7 +159,236 @@
                             </div>
                         </div>
                     </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingSzenario">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSzenario" aria-expanded="false" aria-controls="collapseSzenario">
+                                <b>Beispielszenarien: Wann werde ich gewarnt?</b>
+                            </button>
+                        </h2>
+                        <div id="collapseSzenario" class="accordion-collapse" aria-labelledby="headingSzenario" data-bs-parent="#accordionSummary">
+                            <div class="accordion-body">
+                                <p>
+                                    Jedes Kästchen steht für eine Person, die die Corona-Warn-App (<span class="scenario-field-example scenario-field-cwa"></span>) oder die Luca-App (<span class="scenario-field-example scenario-field-luca"></span>) nutzt. Wenn Du mit der Maus über ein Kästchen fährst, siehst Du rot umrandet, wer im Infektionsfall gewarnt wird.
+                                </p>
+                                <div class="scenario">
+                                    <div class="scenario-explain">5 CWA-Nutzer, 5 Luca-Nutzer</div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-info"></div>
+                                </div>
+                                <hr>
+                                <div class="scenario">
+                                    <div class="scenario-explain">Zehn CWA-Nutzer</div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-info"></div>
+                                </div>
+                                <hr>
+                                <div class="scenario">
+                                    <div class="scenario-explain">Zehn Luca-Nutzer</div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-info"></div>
+                                </div>
+                                <hr>
+                                <div class="scenario">
+                                    <div class="scenario-explain">Großveranstaltung, Luca und CWA bunt durchmischt</div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-cwa"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-field scenario-field-luca"></div>
+                                    <div class="scenario-info"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingMap">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMap" aria-expanded="false" aria-controls="collapseMap">
+                                <b>Die Ergebnisse der Anfragen</b>
+                            </button>
+                        </h2>
+                        <div id="collapseMap" class="accordion-collapse" aria-labelledby="headingMap" data-bs-parent="#accordionSummary">
+                            <div class="accordion-body">
+                                Im Folgenden werden die Ergebnisse der IFG-Anfragen (die über die Suche oben möglich sind) dargestellt. Die Karte zeigt, in welchen Landkreisen bisher Anfragen gestellt wurden. Graue Bereiche sollten noch angefragt werden. Sobald genügend Antworten der Gesundheitsämter vorliegen, wird es neben dieser Karte noch eine Karte/Auswertung zum Luca-Nutzungsstatus hinzukommen. 
+                                <!--
+                                <div class="btn-group" id="results_type">
+                                    <a class="btn btn-primary active" data-resulttype="requests">Anfragen</a>
+                                    <a class="btn btn-outline-primary" data-resulttype="kpnv">Kontaktnachverfolgung</a>
+                                    <a class="btn btn-outline-primary" data-resulttype="zweckentfremdung">Zweckentfremdung KPNV-Daten</a>
+                                </div>
+                                -->
+                                <br><br>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" id="progress_two_requests" role="progressbar" style="width: 0.00%" aria-valuenow="0" aria-valuemin="0"></div>
+                                    <div class="progress-bar bg-success progress-bar-striped"  id="progress_one_request" role="progressbar" style="width: 0.00%" aria-valuenow="0" aria-valuemin="0"></div>
+                                    <!--<div class="progress-bar bg-warning progress-bar-striped" role="progressbar" style="width: 12.5%" aria-valuenow="2" aria-valuemin="0" aria-valuemax="16"></div>-->
+                                    
+                                </div>
+                                <br>
+                                <div id="map_container"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                
                 <br><br>
 
                 <!--
@@ -314,8 +545,13 @@ luca.fail:443 - - [03/Jan/2022:22:27:51 +0100] 441 "GET /assets/timeline.png HTT
 
         <script src="/js/jquery.js"></script>
         <script src="/js/bootstrap.bundle.min.js"></script>
+        <!--
         <script src="/js/raphael.min.js"></script>
         <script src="/js/flowchart.min.js"></script>
+        -->
+        <script src="/osmtiles/leaflet/leaflet.js"></script>
+        <script src="/osmtiles/leaflet/Leaflet.fullscreen.min.js"></script>
+        <script src="/js/kreise_geojson.js"></script>
         <script src="/js/main.js"></script>
     </body>
 </html>
