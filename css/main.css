@@ -52,6 +52,19 @@ div.quote-origin {
     background-color: #8b0000;
     color: white; 
 }
+#legend_badges {
+    font-size: smaller;
+}
+#legend_badges td {
+    vertical-align: top;
+}
+#legend_badges tr {
+    border-top: 1px solid #ccc;
+}
+#legend_badges td {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
 
 button.btn {
     margin: 5px;

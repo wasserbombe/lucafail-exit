@@ -215,21 +215,119 @@
             healthDepartments = data.data;
         },
         "complete": function (data){
+            showHDList(); 
             refreshMapContent(); 
         }
     });
-    $("#hdsupport_searchterm").on("keyup", function(){
+
+    var HDPage = 0; 
+    var HDToShow = 10; 
+    var HDListPaginationClickHandler = function(e){
+        e.preventDefault(); 
+        var $this = $(this); 
+        var page = $this.data("page");
+        console.log($this);
+        console.log("Navigate to page", page);
+        if (page >= 0){
+            HDPage = page; 
+        }
+        
+        showHDList(); 
+    };
+    var showHDList = () => {
         if (healthDepartments.length > 0) {
-            var searchTerm = $(this).val().toLowerCase();
+            var searchTerm = $("#hdsupport_searchterm").val().toLowerCase();
             $("#hdsupport_table tbody").html("");
+
+            HDFilteredList = []; 
             healthDepartments.forEach((department) => {
-                var take = false; 
-                department.zips.forEach((zip) => {
-                    if (zip.toLowerCase().indexOf(searchTerm) > -1) {
-                        take = true; 
+                // FILTER
+                var take = true; 
+
+                if (searchTerm.length > 0){
+                    var takeByZIP = false;
+                    department.zips.forEach((zip) => {
+                        if (zip.toLowerCase().indexOf(searchTerm) > -1) {
+                            takeByZIP = false; 
+                        }
+                    }); 
+                    take = takeByZIP || department.name_long.toLowerCase().indexOf(searchTerm) > -1; 
+                }
+
+                var onlyAnsweringHDs = $("#onlyAnsweringHDs").is(":checked");
+                if (onlyAnsweringHDs){
+                    if (Object.keys(department.fds_feedback).length == 0){
+                        take = false; 
                     }
-                }); 
-                if (take || department.name_long.toLowerCase().indexOf(searchTerm) > -1) {
+                }
+
+                var onlyNonAskedHDs = $("#onlyNonAskedHDs").is(":checked");
+                if (onlyNonAskedHDs){
+                    var min_requests = 10; 
+                    for (a in department.fds_requests){
+                        if (department.fds_requests.hasOwnProperty(a)){
+                            if (department.fds_requests[a].length < min_requests){
+                                min_requests = department.fds_requests[a].length;
+                            }
+                        }
+                    }
+                    if (min_requests > 0) take = false; 
+                }
+
+                if (take) {
+                    HDFilteredList.push(department);
+                }
+            });
+
+            $(".HDListPagination").html("");
+            var maxPage = Math.ceil(HDFilteredList.length/HDToShow);
+            for (var p = 0; p < maxPage; p++){
+                if (
+                    p >= maxPage-2
+                    || p == HDPage
+                    || p < 2
+                    || p == HDPage+1
+                    || p == HDPage-1
+                ){
+                        
+                    var $pli = $("<li>").addClass("page-item").attr("data-page", p).on("click", HDListPaginationClickHandler);
+                    if (p == HDPage){
+                        $pli.addClass("active");
+                    }
+                    var $pa = $("<a>").addClass("page-link").html(p+1);
+                    $pli.append($pa);
+                    $(".HDListPagination").append($pli);
+                } else if (p == HDPage+2 || p == HDPage-2){
+                    var $pli = $("<li>").addClass("page-item");
+                    var $pa = $("<a>").addClass("page-link").html("...");
+                    $pli.append($pa);
+                    $(".HDListPagination").append($pli);
+                }
+            }
+            // prev
+            var $pli = $("<li>").addClass("page-item");
+            if (HDPage > 0){
+                $pli.attr("data-page", HDPage-1).on("click", HDListPaginationClickHandler);
+            } else {
+                $pli.addClass("disabled");
+            }
+            $pli.append($("<span>").addClass("page-link").html("&laquo; Letzte"));
+            $(".HDListPagination").prepend($pli);
+
+            // next
+            var $pli = $("<li>").addClass("page-item");
+            if (HDPage < maxPage-1){
+                $pli.attr("data-page", HDPage+1).on("click", HDListPaginationClickHandler);
+            } else {
+                $pli.addClass("disabled");
+            }
+            $pli.append($("<span>").addClass("page-link").html("Nächste &raquo;"));
+            $(".HDListPagination").append($pli);
+
+            HDFilteredList.forEach((department, d) => {
+                if (d >= HDPage*HDToShow && d < (HDPage+1)*HDToShow){
+                    d++;
+
                     var $tr = $("<tr>");
                     $tr.append($("<td>").html('<b>'+department.name + "</b><br>" + department.name_addition));
                     var pct = department.zips_supported.length/department.zips.length;
@@ -239,15 +337,46 @@
                     var text = ""; 
                     if (pct == 1){
                         angebunden_html = '<span class="badge-anonym badge-anonym-nie" title="'+((Math.round(pct_full * 100) / 100) + "%")+'">angebunden</span>';
-                        text = '<small>Laut Luca-Webseite ist dieses Gesundheitsamt angebunden und könnte eine Kontaktnachverfolgung über das Luca-System durchführen. Jedoch haben die meisten Gesundheitsämter die Kontaktnachverfolgung eingestellt, die meisten Bundesländer haben die Luca-Lizenz außerdem gekündigt.<br>Du solltest nachfragen, ob dieses Gesundheitsamt wirklich noch Luca nutzt, und falls nicht, das Gesundheitsamt auffordern, den Eintrag auf der Luca-Webseite ändern zu lassen und Betreiber:innen von Locations darüber zu benachrichtigen. Denn wenn das Gesundheitsamt nicht mehr Luca nutzt, dann ist es sinnlos, Luca als Betreiber:in oder Nutzer:in weiterhin zu nutzen.</small>';
                     } else if (pct == 0){
                         angebunden_html = '<span class="badge-anonym badge-anonym-immer" title="'+((Math.round(pct_full * 100) / 100) + "%")+'">nicht angebunden</span>';
-                        text = "<small>Laut Luca-Webseite ist dieses Gesundheitsamt nicht angebunden. D.h. es wird keine Kontaktnachverfolgung über die Luca-App durchgeführt und es erfolgt keine Warnung zu einer möglichen Infektion über die Luca-App. Für Betreiber:innen als auch Nutzer:innen hat die Luca-App hier also keinen Nutzen.</small>";
                     } else {
                         angebunden_html = '<span class="badge-anonym badge-anonym-meist" title="'+((Math.round(pct_full * 100) / 100) + "%")+'">teilw. angebunden?</span>';
-                        text = "<small>❓ Nur ein Teil des Gebiets, für welches dieses Gesundheitsamt verantwortlich ist, ist laut Luca-Webseite angebunden. Es fehlen: "+ department.zips_not_supported.join(', ') + '.</small>';
                     }
-                    $tr.append($("<td>").html(angebunden_html));
+                    $tr.append($("<td>").html("<small>"+angebunden_html+"</small>"));
+                    
+                    // connected?
+                    var connected_html = "❓";
+                    if (department.fds_feedback && typeof department.fds_feedback.isConnected !== "undefined"){
+                        if (department.fds_feedback.isConnected){
+                            connected_html = "✔️";
+                        } else {
+                            connected_html = "❌";
+                        }
+                    }
+                    if (department.fds_feedback && typeof department.fds_feedback.connectedSince !== "undefined"){
+                        if (department.fds_feedback.connectedSince == null && typeof department.fds_feedback.isConnected !== "undefined" && !department.fds_feedback.isConnected){
+                            connected_html += "<br>(nie)";
+                        } else {
+                            connected_html += "<br>(seit " + department.fds_feedback.connectedSince + ")";
+                        }
+                    }
+                    if (department.fds_feedback && typeof department.fds_feedback.connectedUntil !== "undefined" && department.fds_feedback.connectedUntil != null){
+                        connected_html += "<br>(bis " + department.fds_feedback.connectedUntil + ")";
+                    }
+                    $tr.append($("<td>").html("<small>"+connected_html+"</small>"));
+
+                    // used
+                    var used_html = "❓";
+                    if (department.fds_feedback && typeof department.fds_feedback.isUsed !== "undefined"){
+                        if (department.fds_feedback.isUsed){
+                            used_html = "✔️";
+                        } else {
+                            used_html = "❌";
+                        }
+                    }
+                    $tr.append($("<td>").html("<small>"+used_html+"</small>"));
+
+                    // beschreibung
                     $tr.append($("<td>").html(text));
 
                     var $actiontd = $("<td>");
@@ -303,6 +432,7 @@
 
                             $actiontd.append($btn_frag_missbrauch);
                         }
+                        $actiontd.append("<br>");
 
                         // lucaexit-nutzungsstatus
                         if (department.fds_requests && department.fds_requests["lucaexit-nutzungsstatus"] && department.fds_requests["lucaexit-nutzungsstatus"].length > 0){
@@ -366,6 +496,16 @@
                     $("#hdsupport_table tbody").append($tr);
                 }
             });
+
+
         }
+    };
+    $("#hdsupport_searchterm").on("keyup", function(){
+        HDPage = 0; // reset paging
+        showHDList(); 
     }); 
+    $("form input[type=checkbox]").on("change", function(){
+        HDPage = 0; // reset paging
+        showHDList(); 
+    });
 })(); 

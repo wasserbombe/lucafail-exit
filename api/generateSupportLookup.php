@@ -45,6 +45,8 @@
 
     include __DIR__.'/../config/config.php';
 
+    include __DIR__.'/lookupFDSFeedback.php'; 
+
     // check if we find geocoding information for this ZIP code. If not, we'll assume it's a Postfach. 
     function isPostfach($zip){
         global $_CONFIG; 
@@ -122,7 +124,9 @@
                 if (!isset($fds_requests_by_tags[$tag][$object["public_body"]["id"]])){
                     $fds_requests_by_tags[$tag][$object["public_body"]["id"]] = [];
                 }
-                $fds_requests_by_tags[$tag][$object["public_body"]["id"]][] = $object; 
+                $this_request = cachedWebRequest($object["resource_uri"], "fds_request", 60*60*1);
+                $this_request = json_decode($this_request, true);
+                $fds_requests_by_tags[$tag][$object["public_body"]["id"]][] = $this_request; 
             }
         } while ($res["meta"]["next"] && sizeof($res["objects"]) == $limit);
     }
@@ -274,6 +278,18 @@
                     $hd["fds_requests"][$tag] = array();
                     if (isset($fds_requests_by_tags[$tag][$hd["fds"]["id"]])){
                         $hd["fds_requests"][$tag] = $fds_requests_by_tags[$tag][$hd["fds"]["id"]];
+                    }
+                }
+            }
+
+            $hd["fds_feedback"] = array();
+
+            foreach ($hd["fds_requests"] as $tag => $requests){
+                foreach ($requests as $request){
+                    if (isset($fds_feedback[$request["id"]])){
+                        foreach ($fds_feedback[$request["id"]] as $question => $feedback){
+                            $hd["fds_feedback"][$question] = $feedback;
+                        }
                     }
                 }
             }

@@ -138,23 +138,78 @@
                         </h2>
                         <div id="collapseAvailCheck" class="accordion-collapse" aria-labelledby="headingAvailCheck" data-bs-parent="#accordionSummary">
                             <div class="accordion-body">
-                                Gesundheitsamt / PLZ: <input type="text" id="hdsupport_searchterm">
+                                <form>
+                                    <div class="form-group">
+                                        <label for="hdsupport_searchterm">Gesundheitsamt / PLZ:</label>
+                                        <input type="text" id="hdsupport_searchterm" class="form-control">
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="onlyAnsweringHDs">
+                                        <label class="form-check-label" for="onlyAnsweringHDs">Zeige nur Gesundheitsämter, die geantwortet haben.</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="onlyNonAskedHDs">
+                                        <label class="form-check-label" for="onlyNonAskedHDs">Zeige nur Gesundheitsämter, die noch nicht angefragt wurden.</label>
+                                    </div>
+                                </form>
+
+                                <hr>
+                                <nav>
+                                    <ul class="pagination justify-content-center HDListPagination"></ul>
+                                </nav>
 
                                 <table class="table" id="hdsupport_table">
                                     <thead>
                                         <th>Gesundheitsamt</th>
                                         <th>Anbindung laut Luca-Webseite</th>
+                                        <th>Anbindung <code>*</code></th>
+                                        <th>Luca warnt <code>*</code></th>
                                         <th>Beschreibung</th>
                                         <th>Aktionen</th>
                                     </thead>
                                     <tbody></tbody>
                                 </table>
+
+                                <nav>
+                                    <ul class="pagination justify-content-center HDListPagination"></ul>
+                                </nav>
+
+                                <table id="legend_badges">
+                                    <tr>
+                                        <td>
+                                            <nobr><span class="badge-anonym badge-anonym-immer">nicht angebunden</span></nobr>
+                                        </td>
+                                        <td>
+                                            Laut Luca-Webseite ist dieses Gesundheitsamt nicht angebunden. D.h. es wird keine Kontaktnachverfolgung über die Luca-App durchgeführt und es erfolgt keine Warnung zu einer möglichen Infektion über die Luca-App. Für Betreiber:innen als auch Nutzer:innen hat die Luca-App hier also keinen Nutzen.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <nobr><span class="badge-anonym badge-anonym-nie">angebunden</span></nobr>
+                                        </td>
+                                        <td>
+                                            Laut Luca-Webseite ist dieses Gesundheitsamt angebunden und könnte eine Kontaktnachverfolgung über das Luca-System durchführen. Jedoch haben die meisten Gesundheitsämter die Kontaktnachverfolgung eingestellt, die meisten Bundesländer haben die Luca-Lizenz außerdem gekündigt.<br>Du solltest nachfragen, ob dieses Gesundheitsamt wirklich noch Luca nutzt, und falls nicht, das Gesundheitsamt auffordern, den Eintrag auf der Luca-Webseite ändern zu lassen und Betreiber:innen von Locations darüber zu benachrichtigen. Denn wenn das Gesundheitsamt nicht mehr Luca nutzt, dann ist es sinnlos, Luca als Betreiber:in oder Nutzer:in weiterhin zu nutzen.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <nobr><span class="badge-anonym badge-anonym-meist">teilw. angebunden</span></nobr>
+                                        </td>
+                                        <td>
+                                            Nur ein Teil des Gebiets, für welches dieses Gesundheitsamt verantwortlich ist, ist laut Luca-Webseite angebunden.
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                <hr>
                                 <small>
                                     Die hier angezeigten Daten basieren auf den Postleitzahlen, die Luca auf seiner Webseite als "angebunden" ausweist. Die Postleitzahlen werden mithilfe von Daten des Statistischen Bundesamts (DESTATIS) mit Landkreisen verknüpft (Stand: 31.12.2021). Die Zuständigkeit der Gesundheitsämter wird über das <a href="https://tools.rki.de/PLZTool/" target="_blank">RKI-PLZ-Tool</a> ermittelt (Stand: 01.02.2022). Die Buttons öffnen eine Vorlage für eine Informationsfreiheitsanfrage via Frag den Staat. Gab es dort bereits eine Anfrage, wird Dir ein Button zum Ergebnis der Anfrage (grün) oder zur noch laufenden Anfrage (grau) angezeigt. Sollte es Deine erste Anfrage sein, beachte auch den <a href="https://fragdenstaat.de/informationsfreiheit/einsteiger-guide/" target="_blank">Einsteiger-Guide</a> von Frag den Staat.<br>
                                     <a href="https://fragdenstaat.de/anfragen/tag/lucaexit-missbrauch_kpnv/" target="_blank">Alle Anfragen zum Missbrauch von Daten der KPNV</a> &middot; 
                                     <a href="https://fragdenstaat.de/anfragen/tag/lucaexit-nutzungsstatus/" target="_blank">Alle Anfragen zur Luca-Nutzung</a>
                                     <br>
-                                    Vielen Dank an <a href="https://fragdenstaat.de/informationsfreiheit/?pk_campaign=lucaexit" target="_blank">Frag den Staat</a>, ohne diese wunderbare Informationsfreiheits-Plattform samt API-Anbindung wäre dieses kleine Tool hier gar nicht möglich gewesen!
+                                    Vielen Dank an <a href="https://fragdenstaat.de/informationsfreiheit/?pk_campaign=lucaexit" target="_blank">Frag den Staat</a>, ohne diese wunderbare Informationsfreiheits-Plattform samt API-Anbindung wäre dieses kleine Tool hier gar nicht möglich gewesen!<br>
+                                    <br>
+                                    <font color="darkred"><b>*</b></font> Die Daten von mit <code>*</code> markierten Spalten ergeben sich aus den Antworten der IFG-Anfragen via Frag den Staat. Sie werden derzeit händisch ausgewertet; daher ist eine kleine Verzögerung zwischen erfolgreicher Beantwortung einer Anfrage und der Anzeige auf dieser Seite möglich. Hilf' uns, indem Du das "Ergebnis"-Feld Deiner Frag den Staat-Anfrage aktuell hältst. Vielen Dank!
                                 </small>
                             </div>
                         </div>
