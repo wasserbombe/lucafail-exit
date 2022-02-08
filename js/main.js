@@ -210,7 +210,7 @@
 
     var healthDepartments = []; 
     $.ajax({
-        "url": "/api/health_departments.json",
+        "url": "/api/health_departments.min.json",
         "success": function(data){
             healthDepartments = data.data;
         },

@@ -311,6 +311,7 @@
     }
 
     file_put_contents(__DIR__."/health_departments.json", json_encode($res, JSON_PRETTY_PRINT));
+    file_put_contents(__DIR__."/health_departments.min.json", json_encode($res));
 
     // CSV-Export for FDS - https://twitter.com/fragdenstaat/status/1488101248003973123
     $csv = array();
