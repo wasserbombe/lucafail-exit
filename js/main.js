@@ -247,7 +247,7 @@
                     var takeByZIP = false;
                     department.zips.forEach((zip) => {
                         if (zip.toLowerCase().indexOf(searchTerm) > -1) {
-                            takeByZIP = false; 
+                            takeByZIP = true; 
                         }
                     }); 
                     take = takeByZIP || department.name_long.toLowerCase().indexOf(searchTerm) > -1; 
