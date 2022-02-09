@@ -361,7 +361,7 @@
                     if (department.fds_feedback && typeof department.fds_feedback.connectedSince !== "undefined"){
                         if (department.fds_feedback.connectedSince == null && typeof department.fds_feedback.isConnected !== "undefined" && !department.fds_feedback.isConnected){
                             connected_html += "<br>(nie)";
-                        } else {
+                        } else if (department.fds_feedback.connectedSince != null) {
                             connected_html += "<br>(seit " + department.fds_feedback.connectedSince + ")";
                         }
                     }
