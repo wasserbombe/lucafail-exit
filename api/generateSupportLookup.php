@@ -126,6 +126,12 @@
                 }
                 $this_request = cachedWebRequest($object["resource_uri"], "fds_request", 60*60*1);
                 $this_request = json_decode($this_request, true);
+
+                // unset some fields that are not needed for us
+                // law
+                if (isset($this_request["law"])) unset($this_request["law"]);
+                if (isset($this_request["public_body"]["laws"])) unset($this_request["public_body"]["laws"]);
+
                 $fds_requests_by_tags[$tag][$object["public_body"]["id"]][] = $this_request; 
             }
         } while ($res["meta"]["next"] && sizeof($res["objects"]) == $limit);
@@ -283,14 +289,20 @@
             }
 
             $hd["fds_feedback"] = array();
+            $hd["fds_meta"] = array(
+                "countMessages" => 0
+            );
 
             foreach ($hd["fds_requests"] as $tag => $requests){
                 foreach ($requests as $request){
+                    // get feedback from feedback lookup
                     if (isset($fds_feedback[$request["id"]])){
                         foreach ($fds_feedback[$request["id"]] as $question => $feedback){
                             $hd["fds_feedback"][$question] = $feedback;
                         }
                     }
+
+                    $hd["fds_meta"]["countMessages"] += sizeof($request["messages"]);
                 }
             }
 

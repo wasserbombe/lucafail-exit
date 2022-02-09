@@ -54,6 +54,7 @@
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(mymap);
 
+    /*
     var legend = L.control({position: 'bottomleft'});
     legend.onAdd = function (map) {
         var div = L.DomUtil.create('div', 'info legend');
@@ -63,6 +64,7 @@
         return div;
     };
     legend.addTo(mymap);
+    */
 
     var kreislayer = L.geoJSON(kreise_geojson, {
         onEachFeature: function (feature, layer){
@@ -178,9 +180,6 @@
             layer.bindPopup(content);
         });
 
-        console.log("count_one_request", count_one_request);
-        console.log("count_two_requests", count_two_requests);
-        // aria-valuenow="9" aria-valuemin="0" aria-valuemax="16"
         $("#progress_one_request")
             .css("width", ((count_one_request-count_two_requests)/count_kreise*100)+"%")
             .attr("aria-valuenow", count_one_request-count_two_requests)
@@ -376,8 +375,30 @@
                     }
                     $tr.append($("<td>").html("<small>"+used_html+"</small>"));
 
+                    // luca connect
+                    var luca_connect_html = "❓";
+                    if (department.fds_feedback && typeof department.fds_feedback.lucaConnectPossible !== "undefined"){
+                        if (department.fds_feedback.lucaConnectPossible){
+                            luca_connect_html = "✔️";
+                        } else {
+                            luca_connect_html = "❌";
+                        }
+                    }
+                    if (department.fds_feedback && typeof department.fds_feedback.lucaConnectUsed !== "undefined"){
+                        if (department.fds_feedback.lucaConnectUsed){
+                            luca_connect_html += "<br>(bereits genutzt)";
+                        } else {
+                            luca_connect_html += "<br>(nie genutzt)";
+                        }
+                    }
+                    $tr.append($("<td>").html("<small>"+luca_connect_html+"</small>"));
+
                     // beschreibung
-                    $tr.append($("<td>").html(text));
+                    var beschreibung = []; 
+                    if (department.fds_feedback && typeof department.fds_feedback.date !== "undefined"){
+                        beschreibung.push("Antwort v. " + department.fds_feedback.date);
+                    }
+                    $tr.append($("<td>").html("<small>" + beschreibung.join("<br>") + "</small>"));
 
                     var $actiontd = $("<td>");
                     if (department.fds && department.fds.id){
