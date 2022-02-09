@@ -350,7 +350,7 @@
                     $tr.append($("<td>").html("<small>"+angebunden_html+"</small>"));
                     
                     // connected?
-                    var connected_html = "❓";
+                    var connected_html = "?";
                     if (department.fds_feedback && typeof department.fds_feedback.isConnected !== "undefined"){
                         if (department.fds_feedback.isConnected){
                             connected_html = "✔️";
@@ -371,7 +371,7 @@
                     $tr.append($("<td>").html("<small>"+connected_html+"</small>"));
 
                     // used
-                    var used_html = "❓";
+                    var used_html = "?";
                     if (department.fds_feedback && typeof department.fds_feedback.isUsed !== "undefined"){
                         if (department.fds_feedback.isUsed){
                             used_html = "✔️";
@@ -382,7 +382,7 @@
                     $tr.append($("<td>").html("<small>"+used_html+"</small>"));
 
                     // luca connect
-                    var luca_connect_html = "❓";
+                    var luca_connect_html = "?";
                     if (department.fds_feedback && typeof department.fds_feedback.lucaConnectPossible !== "undefined"){
                         if (department.fds_feedback.lucaConnectPossible){
                             luca_connect_html = "✔️";
@@ -400,7 +400,7 @@
                     $tr.append($("<td>").html("<small>"+luca_connect_html+"</small>"));
 
                     // contact data used 
-                    var contact_data_used_html = "❓";
+                    var contact_data_used_html = "?";
                     if (department.fds_feedback){
                         if (typeof department.fds_feedback.contactDataRequests !== "undefined"){
                             contact_data_used_html = department.fds_feedback.contactDataRequests + " Anfrage(n)";
