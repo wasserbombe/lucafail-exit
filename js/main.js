@@ -395,6 +395,9 @@
 
                     // beschreibung
                     var beschreibung = []; 
+                    if (department.fds_feedback && typeof department.fds_feedback.isModellregion !== "undefined" && department.fds_feedback.isModellregion){
+                        beschreibung.push("Luca-Modellregion");
+                    }
                     if (department.fds_feedback && typeof department.fds_feedback.date !== "undefined"){
                         beschreibung.push("Antwort v. " + department.fds_feedback.date);
                     }
@@ -479,12 +482,11 @@
                                 '- Ist Ihre Behörde derzeit an das Luca-System angebunden? Wenn ja, seit wann und bis wann?',
                                 '- Nutzt Ihre Behörde das Luca-System? Wenn ja, für was (Kontaktnachverfolgung bzw. -ermittlung, "Warnungen", ...)? ',
                                 '- Sollte Ihre Behörde derzeit keine Kontaktnachverfolgung (mehr) durchführen: Wurden Luca-Locations darüber informiert, dass eine Kontaktdatenerfassung damit nutzlos ist bzw. wurden die Luca-Nutzer darüber benachrichtigt, dass sie im Infektionsfall nicht mehr von Ihnen via Luca-App informiert werden?',
-                                '- Wie viele Kontaktnachverfolgungen wurden in den letzten 3 bzw. 6 Monaten via Luca durchgeführt (bitte einzeln beantworten)?',
-                                '- Ist eine weitere Nutzung des Luca-System durch das Bundesland vorgesehen? Falls nein, ziehen Sie einen eigenen Vertrag mit Luca in Betracht?',
+                                '- Wie viele Kontaktnachverfolgungen wurden in den letzten 3, in den letzten 6 Monaten und wie viele insgesamt via Luca durchgeführt (bitte einzeln beantworten)?',
+                                '- Ist - Ihrem Kenntnisstand nach - eine weitere Nutzung des Luca-Systems durch das Bundesland vorgesehen? Falls nein, ziehen Sie einen eigenen Vertrag mit Luca in Betracht?',
                                 '- Wäre eine Nutzung von Luca Connect in Ihrem Amt derzeit möglich?',
                                 '- Wie oft wurde Luca Connect bzw. die dazugehörigen Features von Ihnen bereits genutzt?',
-                                '',
-                                '(bitte antworten Sie OBERHALB dieser E-Mail - vielen Dank!)',
+                                '- War/ist Ihre Behörde bzw. Ihr Land-/Stadtkreis Modellregion bei der Implementierung von Luca?',
                                 ''
                             ];
 
@@ -496,6 +498,9 @@
                             } else {
                                 fds_txt_status.push('Die Webseite von Luca gibt an, dass derzeit kein von Ihnen betreuter Bereich ans Luca-System angeschlossen ist. Ist das richtig?');
                             }
+
+                            fds_txt_status.push('');
+                            fds_txt_status.push('(bitte antworten Sie OBERHALB dieser E-Mail - vielen Dank!)');
 
                             var $btn_frag_status = $("<button>").addClass("btn btn-primary btn-sm").html("<small>Frag nach Luca-Status!</small>");
                             $btn_frag_status.click(function(){
