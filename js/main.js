@@ -3,6 +3,12 @@
         "lucaexit-missbrauch_kpnv": "Zweckentfremdung Kontaktdaten",
         "lucaexit-nutzungsstatus": "Nutzungsstatus Luca"
     };
+
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    });
+
     /**
      * Warning examples
      */
@@ -392,6 +398,18 @@
                         }
                     }
                     $tr.append($("<td>").html("<small>"+luca_connect_html+"</small>"));
+
+                    // contact data used 
+                    var contact_data_used_html = "❓";
+                    if (department.fds_feedback){
+                        if (typeof department.fds_feedback.contactDataRequests !== "undefined"){
+                            contact_data_used_html = department.fds_feedback.contactDataRequests + " Anfrage(n)";
+                            if (typeof department.fds_feedback.contactDataRequestsNotRejected !== "undefined" && department.fds_feedback.contactDataRequestsNotRejected === 0){
+                                contact_data_used_html += "<br>(alle abgelehnt)";
+                            }
+                        }
+                    }
+                    $tr.append($("<td>").html("<small>"+contact_data_used_html+"</small>"));
 
                     // beschreibung
                     var beschreibung = []; 
