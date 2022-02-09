@@ -16,7 +16,8 @@
             "usagePlannedState" => false,
             "usagePlannedDepartment" => false,
             "lucaConnectPossible" => false,
-            "lucaConnectUsed" => false
+            "lucaConnectUsed" => false,
+            "isModellregion" => false
         ),
 
         // https://fragdenstaat.de/a/240148 / Mansfeld Südharz - Amt für Gesundheit
@@ -34,7 +35,8 @@
             "usagePlannedState" => false,
             "usagePlannedDepartment" => null,
             "lucaConnectPossible" => null,
-            "lucaConnectUsed" => false
+            "lucaConnectUsed" => false,
+            "isModellregion" => false
         ),
 
         // https://fragdenstaat.de/a/240089 / Mansfeld Südharz - Amt für Gesundheit
@@ -52,7 +54,27 @@
             "usagePlannedState" => false,
             "usagePlannedDepartment" => false,
             "lucaConnectPossible" => false,
-            "lucaConnectUsed" => false
+            "lucaConnectUsed" => false,
+            "isModellregion" => false
+        ),
+
+        // https://fragdenstaat.de/a/239316 / Hochsauerlandkreis - Gesundheitsamt Fachdienst 37
+        "239316" => array(
+            "date" => "2022-02-09",
+            "isConnected" => true,
+            "connectedSince" => "2020",
+            "connectedUntil" => null,
+            "isUsed" => false,
+            "isLucaWebsiteCorrect" => true,
+            "usage" => [],
+            "nonUsageInfo" => false,
+            "contactTracings3m" => 0,
+            "contactTracings6m" => 0,
+            "usagePlannedState" => null,
+            "usagePlannedDepartment" => null,
+            "lucaConnectPossible" => null,
+            "lucaConnectUsed" => null,
+            "isModellregion" => true
         ),
     ); 
 ?>
