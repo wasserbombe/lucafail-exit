@@ -76,5 +76,15 @@
             "lucaConnectUsed" => null,
             "isModellregion" => true
         ),
+
+        /****************************************************************************************************************************************************
+         * Zweckentfremdung KPNV-Daten 
+         */
+        // https://fragdenstaat.de/a/237332 / Landratsamt Rhein-Neckar-Kreis - Gesundheitsamt
+        "237332" => array(
+            "contactDataDate" => "2022-01-25",
+            "contactDataRequests" => 1,
+            "contactDataRequestsNotRejected" => 0
+        )
     ); 
 ?>
