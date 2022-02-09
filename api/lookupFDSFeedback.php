@@ -153,6 +153,82 @@
             "isModellregion" => false
         ),
 
+        // https://fragdenstaat.de/a/239337 / Gesundheitsamt Dortmund
+        "239337" => array(
+            "date" => "2022-02-03",
+            "isConnected" => true,
+            "connectedSince" => "Juni 2021",
+            "connectedUntil" => null,
+            "isUsed" => false,
+            "isLucaWebsiteCorrect" => true,
+            "usage" => [],
+            "nonUsageInfo" => false,
+            "contactTracings3m" => 0,
+            "contactTracings6m" => 0,
+            "usagePlannedState" => false,
+            "usagePlannedDepartment" => false,
+            "lucaConnectPossible" => true,
+            "lucaConnectUsed" => false,
+            "isModellregion" => false
+        ),
+
+        // https://fragdenstaat.de/a/239334 / Märkischer Kreis - Gesundheitsamt
+        "239334" => array(
+            "date" => "2022-02-02",
+            "isConnected" => true,
+            "connectedSince" => "August 2020",
+            "connectedUntil" => null,
+            "isUsed" => false,
+            "isLucaWebsiteCorrect" => true,
+            "usage" => [],
+            "nonUsageInfo" => false,
+            "contactTracings3m" => 0,
+            "contactTracings6m" => 0,
+            "usagePlannedState" => null,
+            "usagePlannedDepartment" => null,
+            "lucaConnectPossible" => false,
+            "lucaConnectUsed" => false,
+            "isModellregion" => true
+        ),
+
+        // https://fragdenstaat.de/a/239249 / Gesundheitsamt Hamm
+        "239249" => array(
+            "date" => "2022-02-01",
+            "isConnected" => true,
+            "connectedSince" => "März 2021",
+            "connectedUntil" => null,
+            "isUsed" => true,
+            "isLucaWebsiteCorrect" => true,
+            "usage" => ["Kontaktnachverfolgung"],
+            "nonUsageInfo" => false,
+            "contactTracings3m" => 0,
+            "contactTracings6m" => 1,
+            "usagePlannedState" => null,
+            "usagePlannedDepartment" => null,
+            "lucaConnectPossible" => true,
+            "lucaConnectUsed" => false,
+            "isModellregion" => true
+        ),
+
+        // https://fragdenstaat.de/a/239525 / Kreisverwaltung Bad Dürkheim/Neustadt - Abteilung 7: Gesundheitsamt
+        "239525" => array(
+            "date" => "2022-02-03",
+            "isConnected" => true,
+            "connectedSince" => "12.04.2021",
+            "connectedUntil" => null,
+            "isUsed" => true,
+            "isLucaWebsiteCorrect" => true,
+            "usage" => ["Kontaktnachverfolgung"],
+            "nonUsageInfo" => false,
+            "contactTracings3m" => 2,
+            "contactTracings6m" => 6,
+            "usagePlannedState" => null,
+            "usagePlannedDepartment" => null,
+            "lucaConnectPossible" => true,
+            "lucaConnectUsed" => false,
+            "isModellregion" => false
+        ),
+
 
         /****************************************************************************************************************************************************
          * Zweckentfremdung KPNV-Daten 
@@ -189,6 +265,34 @@
         "239734" => array(
             "contactDataDate" => "2022-02-04",
             "contactDataRequests" => 0,
+            "contactDataRequestsNotRejected" => 0
+        ),
+
+        // https://fragdenstaat.de/a/239332 / Gesundheitsamt Dortmund
+        "239332" => array(
+            "contactDataDate" => "2022-02-03",
+            "contactDataRequests" => 0,
+            "contactDataRequestsNotRejected" => 0
+        ),
+
+        // https://fragdenstaat.de/a/238747 / Landeshauptstadt Stuttgart - Gesundheitsamt
+        "238747" => array(
+            "contactDataDate" => "2022-02-07",
+            "contactDataRequests" => 0,
+            "contactDataRequestsNotRejected" => 0
+        ),
+
+        // https://fragdenstaat.de/a/238760 / Landratsamt Breisgau-Hochschwarzwald - Gesundheitsamt
+        "238760" => array(
+            "contactDataDate" => "2022-01-28",
+            "contactDataRequests" => 1,
+            "contactDataRequestsNotRejected" => 0
+        ),
+
+        // https://fragdenstaat.de/a/239652 / Landeshauptstadt Erfurt - Amt für Soziales und Gesundheit
+        "239652" => array(
+            "contactDataDate" => "2022-02-04",
+            "contactDataRequests" => 1,
             "contactDataRequestsNotRejected" => 0
         ),
     ); 
