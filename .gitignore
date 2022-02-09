@@ -5,6 +5,7 @@ api/data/*.tsv
 api/supportLookup.json
 api/archive/zipsupport/*
 api/health_departments.json
+api/health_departments.min.json
 api/fds_departments.json
 config/*
 robots.txt
