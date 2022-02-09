@@ -419,6 +419,15 @@
                     if (department.fds_feedback && typeof department.fds_feedback.date !== "undefined"){
                         beschreibung.push("Antwort v. " + department.fds_feedback.date);
                     }
+                    for (var rtype in department.fds_requests){
+                        if (department.fds_requests.hasOwnProperty(rtype)){
+                           department.fds_requests[rtype].forEach((request) => {
+                               if (request.summary){
+                                   beschreibung.push(request.summary);
+                               }
+                           });
+                        }
+                    }
                     $tr.append($("<td>").html("<small>" + beschreibung.join("<br>") + "</small>"));
 
                     var $actiontd = $("<td>");
