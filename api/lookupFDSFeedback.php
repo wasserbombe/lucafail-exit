@@ -349,6 +349,106 @@
             "otherUsage" => "Das Amt ist seit dem 14.04.21 angebunden und nutzt Luca primär für Warnhinweise/Empfehlungen zur Durchführung einer Bürgertestung. Die Nutzung von Luca Connect beschränkt sich auch darauf."
         ),
 
+        // https://fragdenstaat.de/a/239462 / Landratsamt Lörrach - Fachbereich Gesundheit
+        "239462" => array(
+            "date" => "2022-02-10",
+            "isConnected" => true,
+            "connectedSince" => null,
+            "connectedUntil" => null,
+            "isUsed" => true,
+            "isLucaWebsiteCorrect" => true,
+            "usage" => [],
+            "nonUsageInfo" => false,
+            "contactTracings3m" => 1,
+            "contactTracings6m" => 1,
+            "usagePlannedState" => false,
+            "usagePlannedDepartment" => false,
+            "lucaConnectPossible" => false,
+            "lucaConnectUsed" => false,
+            "isModellregion" => false,
+            "otherUsage" => ""
+        ),
+
+        // https://fragdenstaat.de/a/239396 / Landratsamt Weimarer Land - Gesundheitsamt
+        "239396" => array(
+            "date" => "2022-02-01",
+            "isConnected" => true,
+            "connectedSince" => null,
+            "connectedUntil" => null,
+            "isUsed" => false,
+            "isLucaWebsiteCorrect" => true,
+            "usage" => [],
+            "nonUsageInfo" => false,
+            "contactTracings3m" => 0,
+            "contactTracings6m" => 0,
+            "usagePlannedState" => null,
+            "usagePlannedDepartment" => false,
+            "lucaConnectPossible" => false,
+            "lucaConnectUsed" => false,
+            "isModellregion" => false,
+            "otherUsage" => "Luca sollte genutzt werden, allerdings stellte sich heraus, dass man technisch noch nicht in der Lage dazu ist (Einspeisung der dadurch erhobenen Daten in das SORMAS-Programm) und dass das Land Thüringen selbst einen Gateway schaffen wollte, in welchen die verschiedensten Kontaktnachverfolgungs-Apps die erhobenen Daten einspeisen könnten. Die Kontaktnachverfolgung im Weimarer Land wird auf konventionelle Weise betrieben."
+        ),
+
+        // https://fragdenstaat.de/a/240090 / Landratsamt Würzburg - Fachbereich 34
+        "240090" => array(
+            "date" => "2022-02-09",
+            "isConnected" => true,
+            "connectedSince" => null,
+            "connectedUntil" => null,
+            "isUsed" => false,
+            "isLucaWebsiteCorrect" => true,
+            "usage" => ["SMS-Massenversand"],
+            "nonUsageInfo" => false,
+            "contactTracings3m" => 0,
+            "contactTracings6m" => 27,
+            "usagePlannedState" => false,
+            "usagePlannedDepartment" => false,
+            "lucaConnectPossible" => false,
+            "lucaConnectUsed" => false,
+            "isModellregion" => false,
+            "otherUsage" => ""
+        ),
+
+        // https://fragdenstaat.de/a/240398 / Landratsamt Enzkreis - Gesundheitsamt
+        "240398" => array(
+            "date" => "2022-02-09",
+            "isConnected" => true,
+            "connectedSince" => null,
+            "connectedUntil" => null,
+            "isUsed" => true,
+            "isLucaWebsiteCorrect" => true,
+            "usage" => [],
+            "nonUsageInfo" => false,
+            "contactTracings3m" => 0,
+            "contactTracings6m" => 10,
+            "usagePlannedState" => null,
+            "usagePlannedDepartment" => false,
+            "lucaConnectPossible" => false,
+            "lucaConnectUsed" => false,
+            "isModellregion" => false,
+            "otherUsage" => ""
+        ),
+
+        // https://fragdenstaat.de/a/239575 / Stadt Oldenburg - Gesundheitsamt
+        "239575" => array(
+            "date" => "2022-02-02",
+            "isConnected" => true,
+            "connectedSince" => null,
+            "connectedUntil" => null,
+            "isUsed" => false,
+            "isLucaWebsiteCorrect" => true,
+            "usage" => ["Abfrage durch Freigabe mit TAN"],
+            "nonUsageInfo" => false,
+            "contactTracings3m" => 0,
+            "contactTracings6m" => 1,
+            "usagePlannedState" => false,
+            "usagePlannedDepartment" => false,
+            "lucaConnectPossible" => false,
+            "lucaConnectUsed" => false,
+            "isModellregion" => false,
+            "otherUsage" => ""
+        ),
+
         /****************************************************************************************************************************************************
          * Zweckentfremdung KPNV-Daten 
          */
@@ -439,6 +539,27 @@
         // https://fragdenstaat.de/a/239130 / Regionalverbandes Saarbrücken - Gesundheitsamt
         "239130" => array(
             "contactDataDate" => "2022-02-07",
+            "contactDataRequests" => 0,
+            "contactDataRequestsNotRejected" => 0
+        ),
+
+        // https://fragdenstaat.de/a/239349 / Landratsamt Esslingen - Gesundheitsamt
+        "239349" => array(
+            "contactDataDate" => "2022-02-01",
+            "contactDataRequests" => 0,
+            "contactDataRequestsNotRejected" => 0
+        ),
+
+        // https://fragdenstaat.de/a/239132 / Gesundheitsamt - Landkreis Merzig-Wadern
+        "239132" => array(
+            "contactDataDate" => "2022-02-08",
+            "contactDataRequests" => 0,
+            "contactDataRequestsNotRejected" => 0
+        ),
+
+        // https://fragdenstaat.de/a/239364 / Gesundheitsamt Kreis Paderborn
+        "239364" => array(
+            "contactDataDate" => "2022-01-31",
             "contactDataRequests" => 0,
             "contactDataRequestsNotRejected" => 0
         ),
