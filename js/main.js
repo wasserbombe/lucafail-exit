@@ -413,11 +413,16 @@
 
                     // beschreibung
                     var beschreibung = []; 
-                    if (department.fds_feedback && typeof department.fds_feedback.isModellregion !== "undefined" && department.fds_feedback.isModellregion){
-                        beschreibung.push("Luca-Modellregion");
-                    }
-                    if (department.fds_feedback && typeof department.fds_feedback.date !== "undefined"){
-                        beschreibung.push("Antwort v. " + department.fds_feedback.date);
+                    if (department.fds_feedback){
+                        if (typeof department.fds_feedback.isModellregion !== "undefined" && department.fds_feedback.isModellregion){
+                            beschreibung.push("Luca-Modellregion");
+                        }
+                        if (typeof department.fds_feedback.date !== "undefined"){
+                            beschreibung.push("Antwort v. " + department.fds_feedback.date);
+                        }
+                        if (department.fds_feedback.otherUsage){
+                            beschreibung.push(department.fds_feedback.otherUsage);
+                        }
                     }
                     for (var rtype in department.fds_requests){
                         if (department.fds_requests.hasOwnProperty(rtype)){
