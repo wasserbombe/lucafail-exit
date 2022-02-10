@@ -449,6 +449,26 @@
             "otherUsage" => ""
         ),
 
+        // https://fragdenstaat.de/a/239790 / Bezirksamt Lichtenberg von Berlin - Abt. Umwelt und Gesundheit
+        "239790" => array(
+            "date" => "2022-02-10",
+            "isConnected" => false,
+            "connectedSince" => null,
+            "connectedUntil" => null,
+            "isUsed" => false,
+            "isLucaWebsiteCorrect" => false,
+            "usage" => [],
+            "nonUsageInfo" => false,
+            "contactTracings3m" => 0,
+            "contactTracings6m" => 0,
+            "usagePlannedState" => false,
+            "usagePlannedDepartment" => false,
+            "lucaConnectPossible" => false,
+            "lucaConnectUsed" => false,
+            "isModellregion" => false,
+            "otherUsage" => "Im Amt wurde die Luca-App nicht installiert und wurde nicht für die Kontaktpersonennachverfolgung sowie Datenerfassung/-auswertung genutzt."
+        ),
+
         /****************************************************************************************************************************************************
          * Zweckentfremdung KPNV-Daten 
          */
