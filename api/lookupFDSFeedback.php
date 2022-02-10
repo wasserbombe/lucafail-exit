@@ -229,6 +229,45 @@
             "isModellregion" => false
         ),
 
+        // htthttps://fragdenstaat.de/a/240406 / Landkreis Potsdam-Mittelmark - Fachdienst Gesundheit
+        "240406" => array(
+            "date" => "2022-02-10",
+            "isConnected" => true,
+            "connectedSince" => "April 2021",
+            "connectedUntil" => null,
+            "isUsed" => false,
+            "isLucaWebsiteCorrect" => true,
+            "usage" => [],
+            "nonUsageInfo" => false,
+            "contactTracings3m" => 0,
+            "contactTracings6m" => 0,
+            "usagePlannedState" => null,
+            "usagePlannedDepartment" => null,
+            "lucaConnectPossible" => false,
+            "lucaConnectUsed" => false,
+            "isModellregion" => false
+        ),
+
+        // https://fragdenstaat.de/a/239589 / Kreisverwaltung Pinneberg - Fachdienst Gesundheit
+         "239589" => array(
+            "date" => "2022-02-03",
+            "isConnected" => true,
+            "connectedSince" => "März 2021",
+            "connectedUntil" => "Ende März 2021",
+            "isUsed" => true,
+            "isLucaWebsiteCorrect" => true,
+            "usage" => ["Kontaktnachverfolgung","Ausbruchsgeschehen"],
+            "nonUsageInfo" => false,
+            "contactTracings3m" => 0,
+            "contactTracings6m" => 5,
+            "usagePlannedState" => false,
+            "usagePlannedDepartment" => null,
+            "lucaConnectPossible" => false,
+            "lucaConnectUsed" => false,
+            "isModellregion" => false,
+            "otherUsage" => "Bei Luca Connect handle es sich um eine Beta-Testversion. Warnungen würden nur mit Luca Connect funktionieren - in der Vorversion war dieser Service nicht enthalten."
+        ),
+
 
         /****************************************************************************************************************************************************
          * Zweckentfremdung KPNV-Daten 
