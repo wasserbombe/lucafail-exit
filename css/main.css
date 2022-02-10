@@ -74,6 +74,10 @@ button.btn {
 #map_container {
     height: 600px; 
 }
+.maplegend {
+    background-color: rgba(255,255,255,0.8);
+    padding: 10px;
+}
 
 /* Scenario */ 
 .scenario-field {

@@ -46,12 +46,6 @@
     /**
      * MAP
      */
-     $("#results_type a").on("click", function (){
-        var resulttype = $(this).data("resulttype");
-        $("#results_type a").attr("class", "btn btn-outline-primary");
-        $("#results_type a[data-resulttype=" + resulttype + "]").removeClass("btn-outline-primary").addClass("btn-primary").addClass("active");
-    });
-
     var mymap = L.map('map_container', {
         fullscreenControl: false
     }).setView([51.3, 10.5], 6); 
@@ -59,18 +53,6 @@
     L.tileLayer('/osmtiles/tile.php?s={s}&z={z}&x={x}&y={y}', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(mymap);
-
-    /*
-    var legend = L.control({position: 'bottomleft'});
-    legend.onAdd = function (map) {
-        var div = L.DomUtil.create('div', 'info legend');
-        labels = ["<b>Legend</b>"];
-        labels.push('<i class="circle" style="background: #006400;"></i> Test');
-        div.innerHTML = labels.join('<br>');
-        return div;
-    };
-    legend.addTo(mymap);
-    */
 
     var kreislayer = L.geoJSON(kreise_geojson, {
         onEachFeature: function (feature, layer){
@@ -116,88 +98,229 @@
     
     }).addTo(mymap);
 
+    $("#results_type a").on("click", function (){
+        var resulttype = $(this).data("resulttype");
+        $("#results_type a").attr("class", "btn btn-outline-primary");
+        $("#results_type a[data-resulttype=" + resulttype + "]").removeClass("btn-outline-primary").addClass("btn-primary").addClass("active");
+
+        refreshMapContent();
+    });
+
+    var maplegend = null; 
     var refreshMapContent = () => {
         var rtype = $("#results_type a.active").data("resulttype");
         console.log("Type: ", rtype); 
-        var count_one_request = count_two_requests = count_kreise = 0; 
+
+        // reset map back to default
+        // all kreise black
         kreislayer.eachLayer(function(layer) {
-            var content = []; 
-            content.push("<b>" + layer.feature.properties.local_name + "</b>");
-            content.push(layer.feature.properties.all_tags["de:regionalschluessel"]);
+            layer.setStyle({color: "black", fillOpacity: 0.2});
+        });
+        // no info
+        $("#map_info").text("");
 
-            var kschluessel = String(layer.feature.properties.all_tags["de:regionalschluessel"]).substring(0,5);
-            var amt = null; 
-            healthDepartments.forEach((department) => {
+        // remove legend if existing
+        if (maplegend){
+            mymap.removeControl(maplegend);
+        }
 
-                department.kreise.forEach((kreis) => {
-                    if (kreis.kschluessel == kschluessel){
-                        amt = department; 
+        var mapContentDefinitions = {
+            responses: {
+                info: "Die Karte zeigt Landkreise und Bezirke, deren verantwortliche Gesundheitsämter bereits auf eine IFG-Anfrage dieser Seite geantwortet haben.",
+                colors: {
+                    HAVING_RESPONSE: {
+                        "name": "Amt hat geantwortet",
+                        "description": "",
+                        "color": "#006400"
+                    },
+                    AWAITING_RESPONSE: {
+                        "name": "Amt muss noch antworten",
+                        "description": "",
+                        "color": "#0065DE"
+                    },
+                    NOT_ASKED_YET: {
+                        "name": "Amt wurde nicht angefragt",
+                        "color": "black",
+                        "description": ""
                     }
-                });
-            });
-
-            if (amt){
-                content.push("Zuständiges Gesundheitsamt: "+amt.name + (amt.name_addition?" ("+amt.name_addition+")":""));
-                var requests_todo = Object.keys(amt.fds_requests).length;
-                var requests_done = 0; 
-                for (var rtype in amt.fds_requests){
-                    if (amt.fds_requests.hasOwnProperty(rtype)){
-                        if (amt.fds_requests[rtype].length > 0) {
-                            requests_done++; 
-                            if (request_types_friendly_names[rtype]){
-                                var request = amt.fds_requests[rtype][0]; 
-                                content.push('✔️ <a href="https://fragdenstaat.de'+request.url+'" target="_blank">' + request_types_friendly_names[rtype] + '</a>');
-                            } else {
-                                content.push("✔️ " + rtype);
-                            }
-                            
-                        } else {
-                            if (request_types_friendly_names[rtype]){
-                                content.push("❌ " + request_types_friendly_names[rtype]);
-                            } else {
-                                content.push("❌ " + rtype);
+                },
+                style: function (amt){
+                    var style = { color: "NOT_ASKED_YET"};
+                    if (amt.fds_feedback && Object.keys(amt.fds_feedback).length > 0){
+                        style.color = "HAVING_RESPONSE";
+                        style.fillOpacity = 0.85; 
+                    } else {
+                        for (var rtype in amt.fds_requests){
+                            if (amt.fds_requests.hasOwnProperty(rtype)){
+                                if (amt.fds_requests[rtype].length > 0) {
+                                    style.color = "AWAITING_RESPONSE";
+                                    style.fillOpacity = 0.6; 
+                                }
                             }
                         }
                     }
-                }
-                if (requests_done > 0) count_one_request++; 
-                if (requests_done > 1) count_two_requests++;
-                count_kreise++;
-                if (requests_done < requests_todo){
-                    content.push("Du kannst die restlichen Anfragen über die Suche oben an das Gesundheitsamt richten.")
-                }
+                    return style; 
+                },
+                popUpContent: function (amt) {
+                    var content = []; 
 
-                var min = 0.2, max = 0.85; 
-                if (requests_done == 0){
-                    layer.setStyle({color: "black", fillOpacity: 0.2});
-                } else {
+                    if (amt.fds_feedback && Object.keys(amt.fds_feedback).length > 0){
+                        content.push("<pre>" + JSON.stringify(amt.fds_feedback, null, 2) + "</pre>");
+                    } else {
+                        var asked = false; 
+                        for (var rtype in amt.fds_requests){
+                            if (amt.fds_requests.hasOwnProperty(rtype)){
+                                if (amt.fds_requests[rtype].length > 0) {
+                                    asked = true;
+                                    content.push("Eine Anfrage wurde gestellt; die Antwort des verantwortlichen Gesundheitsamts steht noch aus.")
+                                    break; 
+                                }
+                            }
+                        }
+                        if (!asked){
+                            content.push("Das zuständige Gesundheitsamt wurde noch nicht angefragt.")
+                        }
+                    }
+
+                    return content; 
+                }
+            },
+            requests: {
+                info: "Die Karte zeigt die Landkreise und Bezirke, in denen Gesundheitsämter bereits über diese Seite angefragt wurden. Graue Bereiche sollten noch angefragt werden, wurden es aber noch nicht.",
+                style: function (amt){
+                    var style = {};
+                    var requests_todo = Object.keys(amt.fds_requests).length;
+                    var requests_done = 0; 
+                    for (var rtype in amt.fds_requests){
+                        if (amt.fds_requests.hasOwnProperty(rtype)){
+                            if (amt.fds_requests[rtype].length > 0) {
+                                requests_done++; 
+                            }
+                        }
+                    }
                     
-                    var per_request = (max-min)/requests_todo; 
-                    var opacity = min + (requests_done*per_request);
+                    if (requests_done == 0){
+                        style = {color: "black", fillOpacity: 0.2};
+                    } else {
+                        var min = 0.2, max = 0.85; 
+                        var per_request = (max-min)/requests_todo; 
+                        var opacity = min + (requests_done*per_request);
 
-                    if (requests_done != 2) console.log("opacity", opacity); 
-
-                    layer.setStyle({color: "#006400", fillOpacity: opacity});
+                        style = {color: "#006400", fillOpacity: opacity};
+                    }
+                    return style; 
+                },
+                popUpContent: function (amt){
+                    var content = []; 
+                    var requests_todo = Object.keys(amt.fds_requests).length;
+                    var requests_done = 0; 
+                    for (var rtype in amt.fds_requests){
+                        if (amt.fds_requests.hasOwnProperty(rtype)){
+                            if (amt.fds_requests[rtype].length > 0) {
+                                requests_done++; 
+                                if (request_types_friendly_names[rtype]){
+                                    var request = amt.fds_requests[rtype][0]; 
+                                    content.push('✔️ <a href="https://fragdenstaat.de'+request.url+'" target="_blank">' + request_types_friendly_names[rtype] + '</a>');
+                                } else {
+                                    content.push("✔️ " + rtype);
+                                }
+                                
+                            } else {
+                                if (request_types_friendly_names[rtype]){
+                                    content.push("❌ " + request_types_friendly_names[rtype]);
+                                } else {
+                                    content.push("❌ " + rtype);
+                                }
+                            }
+                        }
+                    }
+                    if (requests_done < requests_todo){
+                        content.push("Du kannst die restlichen Anfragen über die Suche oben an das Gesundheitsamt richten.")
+                    }
+                    return content; 
                 }
-            } else {
-                content.push("Uns fehlt aktuell die Zuordnung zu einem Gesundheitsamt für diesen Kreis."); 
             }
-            content = content.join("<br>");
-            layer.bindPopup(content);
-        });
+        };
 
-        $("#progress_one_request")
-            .css("width", ((count_one_request-count_two_requests)/count_kreise*100)+"%")
-            .attr("aria-valuenow", count_one_request-count_two_requests)
-            .attr("aria-valuemin", 0)
-            .attr("aria-valuemax", count_kreise);
-        $("#progress_two_requests")
-            .css("width", (count_two_requests/count_kreise*100)+"%")
-            .attr("aria-valuenow", count_two_requests)
-            .attr("aria-valuemin", 0)
-            .attr("aria-valuemax", count_kreise);
+        if (typeof mapContentDefinitions[rtype] !== "undefined"){
+            var contentDefinition = mapContentDefinitions[rtype];
+
+            if (contentDefinition.info){
+                $("#map_info").html(contentDefinition.info);
+            }
+
+            if (contentDefinition.colors){
+                var colors = contentDefinition.colors; 
+                maplegend = L.control({position: 'bottomleft'});
+                maplegend.onAdd = function (map) {
+                    var div = L.DomUtil.create('div', 'maplegend');
+                    labels = ["<b>Legende</b>"];
+                    for (var color in colors) {
+                        if (colors.hasOwnProperty(color)){
+                            labels.push('<div style="width: 10px; height: 10px; background-color: '+colors[color].color+'; display: inline-block"></div> '+colors[color].name);
+                        }
+                    }
+                    
+                    div.innerHTML = labels.join('<br>');
+                    return div;
+                };
+                maplegend = maplegend.addTo(mymap);
+            }
+
+            // loop trough all kreise
+            kreislayer.eachLayer(function(layer) {
+                // find responsible department for this area
+                var kschluessel = String(layer.feature.properties.all_tags["de:regionalschluessel"]).substring(0,5);
+                var amt = null; 
+                healthDepartments.forEach((department) => {
+                    department.kreise.forEach((kreis) => {
+                        if (kreis.kschluessel == kschluessel){
+                            amt = department; 
+                        }
+                    });
+                });
+
+                var content = []; 
+                content.push("<b>" + layer.feature.properties.local_name + "</b>");
+                content.push("Kreis / Regionalschlüssel: " + kschluessel);
+                if (amt){
+                    content.push("Zuständiges Gesundheitsamt: "+amt.name + (amt.name_addition?" ("+amt.name_addition+")":""));
+                    if (typeof contentDefinition.popUpContent === "function"){
+                        content = content.concat(contentDefinition.popUpContent(amt));
+                    }
+                    if (typeof contentDefinition.style === "function"){
+                        var newStyle = contentDefinition.style(amt);
+                        if (newStyle){
+                            if (contentDefinition.colors){
+                                if (newStyle.color && contentDefinition.colors[newStyle.color]){
+                                    newStyle.color = contentDefinition.colors[newStyle.color].color;
+                                }
+                            }
+                            layer.setStyle(newStyle);
+                        }
+                    }
+                } else {
+                    content.push("Uns fehlt aktuell die Zuordnung zu einem Gesundheitsamt für diesen Kreis / Bezirk."); 
+                }
+                layer.bindPopup(content.join("<br>"));
+
+
+            });
+        }
+
+        return; 
+
+            $("#progress_one_request")
+                .css("width", ((count_one_request-count_two_requests)/count_kreise*100)+"%")
+                .attr("aria-valuenow", count_one_request-count_two_requests)
+                .attr("aria-valuemin", 0)
+                .attr("aria-valuemax", count_kreise);
+            $("#progress_two_requests")
+                .css("width", (count_two_requests/count_kreise*100)+"%")
+                .attr("aria-valuenow", count_two_requests)
+                .attr("aria-valuemin", 0)
+                .attr("aria-valuemax", count_kreise);
     };
-    
 
     /*$.ajax({
         "url": "/api/flowchart_betreiberinnen.txt",
