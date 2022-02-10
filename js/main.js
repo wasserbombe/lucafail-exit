@@ -54,18 +54,6 @@
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(mymap);
 
-    /*
-    var legend = L.control({position: 'bottomleft'});
-    legend.onAdd = function (map) {
-        var div = L.DomUtil.create('div', 'info legend');
-        labels = ["<b>Legend</b>"];
-        labels.push('<i class="circle" style="background: #006400;"></i> Test');
-        div.innerHTML = labels.join('<br>');
-        return div;
-    };
-    legend.addTo(mymap);
-    */
-
     var kreislayer = L.geoJSON(kreise_geojson, {
         onEachFeature: function (feature, layer){
             var content = []; 
@@ -118,6 +106,7 @@
         refreshMapContent();
     });
 
+    var maplegend = null; 
     var refreshMapContent = () => {
         var rtype = $("#results_type a.active").data("resulttype");
         console.log("Type: ", rtype); 
@@ -130,14 +119,45 @@
         // no info
         $("#map_info").text("");
 
+        // remove legend if existing
+        if (maplegend){
+            mymap.removeControl(maplegend);
+        }
+
         var mapContentDefinitions = {
             responses: {
                 info: "Die Karte zeigt Landkreise und Bezirke, deren verantwortliche Gesundheitsämter bereits auf eine IFG-Anfrage dieser Seite geantwortet haben.",
+                colors: {
+                    HAVING_RESPONSE: {
+                        "name": "Amt hat geantwortet",
+                        "description": "",
+                        "color": "#006400"
+                    },
+                    AWAITING_RESPONSE: {
+                        "name": "Amt muss noch antworten",
+                        "description": "",
+                        "color": "#0065DE"
+                    },
+                    NOT_ASKED_YET: {
+                        "name": "Amt wurde nicht angefragt",
+                        "color": "black",
+                        "description": ""
+                    }
+                },
                 style: function (amt){
-                    var style = {};
+                    var style = { color: "NOT_ASKED_YET"};
                     if (amt.fds_feedback && Object.keys(amt.fds_feedback).length > 0){
-                        style.color = "#006400";
+                        style.color = "HAVING_RESPONSE";
                         style.fillOpacity = 0.85; 
+                    } else {
+                        for (var rtype in amt.fds_requests){
+                            if (amt.fds_requests.hasOwnProperty(rtype)){
+                                if (amt.fds_requests[rtype].length > 0) {
+                                    style.color = "AWAITING_RESPONSE";
+                                    style.fillOpacity = 0.6; 
+                                }
+                            }
+                        }
                     }
                     return style; 
                 },
@@ -146,6 +166,20 @@
 
                     if (amt.fds_feedback && Object.keys(amt.fds_feedback).length > 0){
                         content.push("<pre>" + JSON.stringify(amt.fds_feedback, null, 2) + "</pre>");
+                    } else {
+                        var asked = false; 
+                        for (var rtype in amt.fds_requests){
+                            if (amt.fds_requests.hasOwnProperty(rtype)){
+                                if (amt.fds_requests[rtype].length > 0) {
+                                    asked = true;
+                                    content.push("Eine Anfrage wurde gestellt; die Antwort des verantwortlichen Gesundheitsamts steht noch aus.")
+                                    break; 
+                                }
+                            }
+                        }
+                        if (!asked){
+                            content.push("Das zuständige Gesundheitsamt wurde noch nicht angefragt.")
+                        }
                     }
 
                     return content; 
@@ -215,6 +249,24 @@
                 $("#map_info").html(contentDefinition.info);
             }
 
+            if (contentDefinition.colors){
+                var colors = contentDefinition.colors; 
+                maplegend = L.control({position: 'bottomleft'});
+                maplegend.onAdd = function (map) {
+                    var div = L.DomUtil.create('div', 'maplegend');
+                    labels = ["<b>Legende</b>"];
+                    for (var color in colors) {
+                        if (colors.hasOwnProperty(color)){
+                            labels.push('<div style="width: 10px; height: 10px; background-color: '+colors[color].color+'; display: inline-block"></div> '+colors[color].name);
+                        }
+                    }
+                    
+                    div.innerHTML = labels.join('<br>');
+                    return div;
+                };
+                maplegend = maplegend.addTo(mymap);
+            }
+
             // loop trough all kreise
             kreislayer.eachLayer(function(layer) {
                 // find responsible department for this area
@@ -239,6 +291,11 @@
                     if (typeof contentDefinition.style === "function"){
                         var newStyle = contentDefinition.style(amt);
                         if (newStyle){
+                            if (contentDefinition.colors){
+                                if (newStyle.color && contentDefinition.colors[newStyle.color]){
+                                    newStyle.color = contentDefinition.colors[newStyle.color].color;
+                                }
+                            }
                             layer.setStyle(newStyle);
                         }
                     }
@@ -246,6 +303,8 @@
                     content.push("Uns fehlt aktuell die Zuordnung zu einem Gesundheitsamt für diesen Kreis / Bezirk."); 
                 }
                 layer.bindPopup(content.join("<br>"));
+
+
             });
         }
 
@@ -262,7 +321,7 @@
                 .attr("aria-valuemin", 0)
                 .attr("aria-valuemax", count_kreise);
     };
-    
+
     /*$.ajax({
         "url": "/api/flowchart_betreiberinnen.txt",
         "success": function(data){
