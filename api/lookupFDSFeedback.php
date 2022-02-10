@@ -253,7 +253,7 @@
             "date" => "2022-02-03",
             "isConnected" => true,
             "connectedSince" => "März 2021",
-            "connectedUntil" => "Ende März 2021",
+            "connectedUntil" => "Ende März 2022",
             "isUsed" => true,
             "isLucaWebsiteCorrect" => true,
             "usage" => ["Kontaktnachverfolgung","Ausbruchsgeschehen"],
@@ -268,6 +268,86 @@
             "otherUsage" => "Bei Luca Connect handle es sich um eine Beta-Testversion. Warnungen würden nur mit Luca Connect funktionieren - in der Vorversion war dieser Service nicht enthalten."
         ),
 
+        // https://fragdenstaat.de/a/239425 / Stadt Bremerhaven - Magistrat/Gesundheitsamt
+        "239425" => array(
+            "date" => "2022-02-01",
+            "isConnected" => true,
+            "connectedSince" => "Mitte 2021",
+            "connectedUntil" => "Ende März 2022",
+            "isUsed" => true,
+            "isLucaWebsiteCorrect" => true,
+            "usage" => ["Kontaktnachverfolgung"],
+            "nonUsageInfo" => true,
+            "contactTracings3m" => 0,
+            "contactTracings6m" => 3,
+            "usagePlannedState" => false,
+            "usagePlannedDepartment" => false,
+            "lucaConnectPossible" => false,
+            "lucaConnectUsed" => false,
+            "isModellregion" => false,
+            "otherUsage" => ""
+        ),
+
+        // https://fragdenstaat.de/a/239459 / Gesundheitsamt Duisburg
+        "239459" => array(
+            "date" => "2022-02-07",
+            "isConnected" => true,
+            "connectedSince" => "28.5.2021",
+            "connectedUntil" => "(wird gekündigt)",
+            "isUsed" => false,
+            "isLucaWebsiteCorrect" => true,
+            "usage" => [],
+            "nonUsageInfo" => false,
+            "contactTracings3m" => 0,
+            "contactTracings6m" => 0,
+            "usagePlannedState" => false,
+            "usagePlannedDepartment" => false,
+            "lucaConnectPossible" => true,
+            "lucaConnectUsed" => false,
+            "isModellregion" => false,
+            "otherUsage" => ""
+        ),
+
+        // https://fragdenstaat.de/a/239632 / Kreisverwaltung Kaiserslautern - Gesundheitsamt
+        "239632" => array(
+            "date" => "2022-02-04",
+            "isConnected" => true,
+            "connectedSince" => "Mai 2021",
+            "connectedUntil" => null,
+            "isUsed" => false,
+            "isLucaWebsiteCorrect" => true,
+            "usage" => [],
+            "nonUsageInfo" => false,
+            "contactTracings3m" => 0,
+            "contactTracings6m" => 0,
+            "usagePlannedState" => null,
+            "usagePlannedDepartment" => false,
+            "lucaConnectPossible" => false,
+            "lucaConnectUsed" => false,
+            "isModellregion" => false,
+            "otherUsage" => ""
+        ),
+
+        
+        // https://fragdenstaat.de/a/239310 / Landeshauptstadt Stuttgart - Gesundheitsamt
+        "239310" => array(
+            "date" => "2022-02-03",
+            "isConnected" => true,
+            "connectedSince" => "14.04.21",
+            "connectedUntil" => "der Vertrag mit BW ausläuft, voraussichtlich 31.03.22",
+            "isUsed" => true,
+            "isLucaWebsiteCorrect" => true,
+            "usage" => ["Warnhinweise"],
+            "nonUsageInfo" => false,
+            "contactTracings3m" => 0,
+            "contactTracings6m" => 25,
+            "usagePlannedState" => null,
+            "usagePlannedDepartment" => false,
+            "lucaConnectPossible" => true,
+            "lucaConnectUsed" => false,
+            "isModellregion" => false,
+            "otherUsage" => "Das Amt ist seit dem 14.04.21 angebunden und nutzt Luca primär für Warnhinweise/Empfehlungen zur Durchführung einer Bürgertestung. Die Nutzung von Luca Connect beschränkt sich auch darauf."
+        ),
 
         /****************************************************************************************************************************************************
          * Zweckentfremdung KPNV-Daten 
@@ -332,6 +412,34 @@
         "239652" => array(
             "contactDataDate" => "2022-02-04",
             "contactDataRequests" => 1,
+            "contactDataRequestsNotRejected" => 0
+        ),
+
+        // https://fragdenstaat.de/a/239274 / Stadt Bremerhaven - Magistrat/Gesundheitsamt
+        "239274" => array(
+            "contactDataDate" => "2022-01-31",
+            "contactDataRequests" => 1,
+            "contactDataRequestsNotRejected" => 0
+        ),
+
+        // https://fragdenstaat.de/a/239273 / Stadt Bochum - Gesundheitsamt
+        "239273" => array(
+            "contactDataDate" => "2022-02-07",
+            "contactDataRequests" => 0,
+            "contactDataRequestsNotRejected" => 0
+        ),
+
+        // https://fragdenstaat.de/a/239333 / Märkischer Kreis - Gesundheitsamt
+        "239333" => array(
+            "contactDataDate" => "2022-02-02",
+            "contactDataRequests" => 0,
+            "contactDataRequestsNotRejected" => 0
+        ),
+
+        // https://fragdenstaat.de/a/239130 / Regionalverbandes Saarbrücken - Gesundheitsamt
+        "239130" => array(
+            "contactDataDate" => "2022-02-07",
+            "contactDataRequests" => 0,
             "contactDataRequestsNotRejected" => 0
         ),
     ); 
