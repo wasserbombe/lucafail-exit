@@ -469,6 +469,26 @@
             "otherUsage" => "Im Amt wurde die Luca-App nicht installiert und wurde nicht für die Kontaktpersonennachverfolgung sowie Datenerfassung/-auswertung genutzt."
         ),
 
+        // https://fragdenstaat.de/a/239443 / Landratsamt Rhein-Neckar-Kreis - Gesundheitsamt
+        "239443" => array(
+            "date" => "2022-02-11",
+            "isConnected" => true,
+            "connectedSince" => "April 2021",
+            "connectedUntil" => null,
+            "isUsed" => false,
+            "isLucaWebsiteCorrect" => true,
+            "usage" => [],
+            "nonUsageInfo" => false,
+            "contactTracings3m" => 0,
+            "contactTracings6m" => 0,
+            "usagePlannedState" => null,
+            "usagePlannedDepartment" => null,
+            "lucaConnectPossible" => true,
+            "lucaConnectUsed" => false,
+            "isModellregion" => false,
+            "otherUsage" => ""
+        ),
+
         /****************************************************************************************************************************************************
          * Zweckentfremdung KPNV-Daten 
          */
