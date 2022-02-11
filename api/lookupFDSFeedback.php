@@ -489,6 +489,26 @@
             "otherUsage" => ""
         ),
 
+        // https://fragdenstaat.de/a/239435 / Landratsamt Nordhausen - Gesundheitsamt
+        "239435" => array(
+            "date" => "2022-02-11",
+            "isConnected" => true,
+            "connectedSince" => "März 2021",
+            "connectedUntil" => null,
+            "isUsed" => false,
+            "isLucaWebsiteCorrect" => true,
+            "usage" => [],
+            "nonUsageInfo" => false,
+            "contactTracings3m" => 0,
+            "contactTracings6m" => 0,
+            "usagePlannedState" => null,
+            "usagePlannedDepartment" => true,
+            "lucaConnectPossible" => true,
+            "lucaConnectUsed" => false,
+            "isModellregion" => false,
+            "otherUsage" => ""
+        ),
+
         /****************************************************************************************************************************************************
          * Zweckentfremdung KPNV-Daten 
          */
