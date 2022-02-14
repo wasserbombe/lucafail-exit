@@ -623,5 +623,12 @@
             "contactDataRequests" => 0,
             "contactDataRequestsNotRejected" => 0
         ),
+
+        // https://fragdenstaat.de/a/240522 / Landratsamt Ortenaukreis - Gesundheitsamt
+        "240522" => array(
+            "contactDataDate" => "2022-02-14",
+            "contactDataRequests" => 3,
+            "contactDataRequestsNotRejected" => 0
+        ),
     ); 
 ?>
