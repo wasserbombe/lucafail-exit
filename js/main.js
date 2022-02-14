@@ -186,6 +186,61 @@
                     return content; 
                 }
             },
+            zweckentfremdung: {
+                info: "Die Karte zeigt Landkreise und Bezirke, in denen Kontaktdaten der Luca-App von anderen Stellen zu anderen Zwecken außer der Kontaktnachverfolgung angefragt oder sogar herausgegeben/verwendet wurden.",
+                colors: {
+                    HAVING_RESPONSE: {
+                        "name": "Es gab Anfragen, denen (teilweise) nachgekommen wurde.",
+                        "description": "",
+                        "color": "darkred"
+                    },
+                    REQUESTED_NOT_LEAKED: {
+                        "name": "Es gab Anfragen, diese wurden aber abgelehnt",
+                        "description": "",
+                        "color": "#0065DE"
+                    },
+                    NO_REQUESTS: {
+                        "name": "Keine zweckfremden Anfragen",
+                        "color": "#006400",
+                        "description": ""
+                    }
+                },
+                style: function (amt){
+                    var style = {}; 
+
+                    if (amt.fds_feedback && typeof amt.fds_feedback.contactDataRequests !== "undefined"){
+                        if (amt.fds_feedback.contactDataRequests > 0 && amt.fds_feedback.contactDataRequestsNotRejected > 0){
+                            style.color = "REQUESTED_AND_LEAKED";
+                            style.fillOpacity = 0.85; 
+                        } else if (amt.fds_feedback.contactDataRequests > 0){
+                            style.color = "REQUESTED_NOT_LEAKED";
+                            style.fillOpacity = 0.85; 
+                        } else if (amt.fds_feedback.contactDataRequests === 0){
+                            style.color = "NO_REQUESTS";
+                            style.fillOpacity = 0.85; 
+                        }
+                    }
+
+                    return style; 
+                },
+                popUpContent: function (amt) {
+                    var content = []; 
+
+                    if (amt.fds_feedback && typeof amt.fds_feedback.contactDataRequests !== "undefined"){
+                        content.push(amt.fds_feedback.contactDataRequests + " Anfragen nicht im Sinne des IfSG");
+                        content.push(amt.fds_feedback.contactDataRequestsNotRejected + " dieser Anfragen wurden beantwortet");
+
+                        if (amt.fds_requests["lucaexit-missbrauch_kpnv"] && amt.fds_requests["lucaexit-missbrauch_kpnv"][0]){
+                            content.push(""); 
+                            content.push('<a href="https://fragdenstaat.de'+amt.fds_requests["lucaexit-missbrauch_kpnv"][0]["url"]+'" target="_blank">Zur Anfrage &raquo;</a>');
+                        }
+                    } else {
+                        content.push("Das Amt wurde noch nicht angefragt oder hat noch nicht geantwortet"); 
+                    }
+
+                    return content; 
+                }
+            },
             kpnv: {
                 info: "Die Karte zeigt Landkreise und Bezirke, in denen Gesundheitsämter derzeit noch eine Kontaktnachverfolgung via Luca-App durchführen und Nutzer per Luca-App gewarnt oder kontaktiert werden, sollte es einen Infektionsfall während ihrer Anwesenheit gegeben haben.",
                 filters: [{
@@ -305,6 +360,11 @@
                             } else if (typeof amt.fds_feedback.isUsed !== "undefined" && !amt.fds_feedback.contactTracings3m && !amt.fds_feedback.contactTracings6m){
                                 content.push("Das Amt gab an, Luca nicht genutzt zu haben.");
                             }
+                        }
+
+                        if (amt.fds_requests["lucaexit-nutzungsstatus"] && amt.fds_requests["lucaexit-nutzungsstatus"][0]){
+                            content.push(""); 
+                            content.push('<a href="https://fragdenstaat.de'+amt.fds_requests["lucaexit-nutzungsstatus"][0]["url"]+'" target="_blank">Zur Anfrage &raquo;</a>');
                         }
                     } else {
                         content.push("Das Amt wurde noch nicht angefragt oder hat noch nicht geantwortet"); 
