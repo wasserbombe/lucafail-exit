@@ -509,6 +509,26 @@
             "otherUsage" => ""
         ),
 
+        // https://fragdenstaat.de/a/240002 / Stadt Cottbus/Chóśebuz Gesundheitsamt
+        "240002" => array(
+            "date" => "2022-02-14",
+            "isConnected" => true,
+            "connectedSince" => "April 2021",
+            "connectedUntil" => null,
+            "isUsed" => false,
+            "isLucaWebsiteCorrect" => true,
+            "usage" => [],
+            "nonUsageInfo" => false,
+            "contactTracings3m" => 0,
+            "contactTracings6m" => 0,
+            "usagePlannedState" => null,
+            "usagePlannedDepartment" => null,
+            "lucaConnectPossible" => true,
+            "lucaConnectUsed" => false,
+            "isModellregion" => false,
+            "otherUsage" => ""
+        ),
+
         /****************************************************************************************************************************************************
          * Zweckentfremdung KPNV-Daten 
          */
