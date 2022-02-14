@@ -107,6 +107,7 @@
     });
 
     var maplegend = null; 
+    var filterValues = {};
     var refreshMapContent = () => {
         var rtype = $("#results_type a.active").data("resulttype");
         console.log("Type: ", rtype); 
@@ -180,6 +181,133 @@
                         if (!asked){
                             content.push("Das zuständige Gesundheitsamt wurde noch nicht angefragt.")
                         }
+                    }
+
+                    return content; 
+                }
+            },
+            kpnv: {
+                info: "Die Karte zeigt Landkreise und Bezirke, in denen Gesundheitsämter derzeit noch eine Kontaktnachverfolgung via Luca-App durchführen und Nutzer per Luca-App gewarnt oder kontaktiert werden, sollte es einen Infektionsfall während ihrer Anwesenheit gegeben haben.",
+                filters: [{
+                    "type": "dropdown",
+                    "name": "timerange",
+                    "text": "Zeitraum",
+                    "options": [
+                        {
+                            name: "now",
+                            text: "Stand jetzt / zum Zeitpunkt der IFG-Anfrage"
+                        },
+                        {
+                            name: "3m",
+                            text: "in den letzten 3 Monaten"
+                        },
+                        {
+                            name: "6m",
+                            text: "in den letzten 6 Monaten"
+                        },
+                        {
+                            name: "anytime",
+                            text: "irgendwann"
+                        }
+                    ]
+                }],
+                colors: {
+                    LUCA_USED: {
+                        "name": "Amt hat im gewählten Zeitraum Luca genutzt",
+                        "description": "",
+                        "color": "#006400"
+                    },
+                    LUCA_NOT_USED: {
+                        "name": "Amt hat im gewählten Zeitraum Luca nicht genutzt",
+                        "description": "",
+                        "color": "#0065DE"
+                    },
+                    NOT_ASKED_YET: {
+                        "name": "Amt wurde nicht angefragt oder hat noch nicht geantwortet",
+                        "color": "black",
+                        "description": ""
+                    }
+                },
+                style: function (amt, filterValues){
+                    var timerange = filterValues.timerange || "now";
+                    var style = {}; 
+
+                    if (amt.fds_feedback){
+                        if (timerange == "now"){
+                            if (amt.fds_feedback.isUsed && amt.fds_feedback.isUsed === true){
+                                style.color = "LUCA_USED";
+                                style.fillOpacity = 0.85; 
+                            } else if (amt.fds_feedback.isUsed === false) {
+                                style.color = "LUCA_NOT_USED";
+                                style.fillOpacity = 0.85; 
+                            }
+                        } else if (timerange == "3m"){
+                            if (amt.fds_feedback.contactTracings3m > 0){
+                                style.color = "LUCA_USED";
+                                style.fillOpacity = 0.85; 
+                            } else if (amt.fds_feedback.contactTracings3m == 0) {
+                                style.color = "LUCA_NOT_USED";
+                                style.fillOpacity = 0.85; 
+                            }
+                        } else if (timerange == "6m"){
+                            if (amt.fds_feedback.contactTracings6m > 0){
+                                style.color = "LUCA_USED";
+                                style.fillOpacity = 0.85; 
+                            } else if (amt.fds_feedback.contactTracings6m == 0) {
+                                style.color = "LUCA_NOT_USED";
+                                style.fillOpacity = 0.85; 
+                            }
+                        } else if (timerange == "anytime"){
+                            if (amt.fds_feedback.isUsed || amt.fds_feedback.contactTracings3m > 0 || amt.fds_feedback.contactTracings6m > 0){
+                                style.color = "LUCA_USED";
+                                style.fillOpacity = 0.85; 
+                            } else if (typeof amt.fds_feedback.isUsed !== "undefined" && !amt.fds_feedback.contactTracings3m && !amt.fds_feedback.contactTracings6m){
+                                style.color = "LUCA_NOT_USED";
+                                style.fillOpacity = 0.85; 
+                            }
+                        }
+                    }
+                    
+                    return style; 
+                },
+                popUpContent: function (amt, filterValues) {
+                    var content = [];
+                    var timerange = filterValues.timerange || "now";
+
+                    if (amt.fds_feedback && typeof amt.fds_feedback.isUsed !== "undefined"){
+                        if (timerange == "now"){
+                            if (amt.fds_feedback.isUsed && amt.fds_feedback.isUsed === true){
+                                content.push("Das Amt gab an, dass Luca gegenwärtig genutzt wird.");
+                                if (amt.fds_feedback.usage.length > 0){
+                                    content.push("Die Nutzung umfasst: " + amt.fds_feedback.usage.join(", "));
+                                }
+                            } else if (amt.fds_feedback.isUsed === false) {
+                                content.push("Das Amt gab an, Luca gegenwärtig nicht zu nutzen."); 
+                            }
+                        } else if (timerange == "3m"){
+                            if (amt.fds_feedback.contactTracings3m > 0){
+                                content.push("Das Amt gab an, in den letzten drei Monaten " + amt.fds_feedback.contactTracings3m + " Kontaktnachverfolgungen via Luca durchgeführt zu haben.");
+                            } else if (amt.fds_feedback.contactTracings3m == 0) {
+                                content.push("Das Amt gab an, in den letzten drei Monaten keine Kontaktnachverfolgungen via Luca durchgeführt zu haben.");
+                            }
+                        } else if (timerange == "6m"){
+                            if (amt.fds_feedback.contactTracings6m > 0){
+                                content.push("Das Amt gab an, in den letzten sechs Monaten " + amt.fds_feedback.contactTracings6m + " Kontaktnachverfolgungen via Luca durchgeführt zu haben.");
+                            } else if (amt.fds_feedback.contactTracings6m == 0) {
+                                content.push("Das Amt gab an, in den letzten sechs Monaten keine Kontaktnachverfolgungen via Luca durchgeführt zu haben.");
+                            }
+                        } else if (timerange == "anytime"){
+                            if (amt.fds_feedback.isUsed == true || amt.fds_feedback.contactTracings3m > 0 || amt.fds_feedback.contactTracings6m > 0){
+                                content.push("Das Amt gab an, dass Luca genutzt wurde.");
+                                if (amt.fds_feedback.usage.length > 0){
+                                    content.push("Die Nutzung umfasste: " + amt.fds_feedback.usage.join(", "));
+                                }
+                            } else if (typeof amt.fds_feedback.isUsed !== "undefined" && !amt.fds_feedback.contactTracings3m && !amt.fds_feedback.contactTracings6m){
+                                content.push("Das Amt gab an, Luca nicht genutzt zu haben.");
+                            }
+                        }
+                    } else {
+                        content.push("Das Amt wurde noch nicht angefragt oder hat noch nicht geantwortet"); 
                     }
 
                     return content; 
@@ -267,6 +395,39 @@
                 maplegend = maplegend.addTo(mymap);
             }
 
+            $("#map_filter_area").html("");
+            if (contentDefinition.filters){
+                contentDefinition.filters.forEach((filter) => {
+                    if (filter.type == "dropdown"){
+                        var filterID = "map_filter_"+filter.name; 
+                        var $filter = $("<div>"); 
+                        var $label = $("<label>").attr("for", filterID).addClass("form-label").text(filter.text);
+                        $filter.append($label);
+
+                        var $select = $("<select>").addClass("form-select");
+                        $select.attr("id", filterID);
+                        filter.options.forEach((option) => {
+                            if (!filterValues[filter.name]) filterValues[filter.name] = option.name;
+                            var $option = $("<option>");
+                            $option.attr("value", option.name);
+                            if (filterValues[filter.name] == option.name){
+                                $option.attr("selected", "selected");
+                            }
+                            $option.html(option.text);
+                            $select.append($option);
+                        }); 
+                        $select.on("change", function(){
+                            console.log($(this).val());
+                            filterValues[filter.name] = $(this).val();
+                            console.log(filterValues);
+                            refreshMapContent(); 
+                        });
+                        $filter.append($select);
+                        $("#map_filter_area").append($filter);
+                    }
+                }); 
+            }
+
             // loop trough all kreise
             kreislayer.eachLayer(function(layer) {
                 // find responsible department for this area
@@ -286,10 +447,11 @@
                 if (amt){
                     content.push("Zuständiges Gesundheitsamt: "+amt.name + (amt.name_addition?" ("+amt.name_addition+")":""));
                     if (typeof contentDefinition.popUpContent === "function"){
-                        content = content.concat(contentDefinition.popUpContent(amt));
+                        content.push("---------");
+                        content = content.concat(contentDefinition.popUpContent(amt, filterValues));
                     }
                     if (typeof contentDefinition.style === "function"){
-                        var newStyle = contentDefinition.style(amt);
+                        var newStyle = contentDefinition.style(amt, filterValues);
                         if (newStyle){
                             if (contentDefinition.colors){
                                 if (newStyle.color && contentDefinition.colors[newStyle.color]){
@@ -303,8 +465,6 @@
                     content.push("Uns fehlt aktuell die Zuordnung zu einem Gesundheitsamt für diesen Kreis / Bezirk."); 
                 }
                 layer.bindPopup(content.join("<br>"));
-
-
             });
         }
 
