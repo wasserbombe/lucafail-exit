@@ -197,11 +197,11 @@
                     REQUESTED_NOT_LEAKED: {
                         "name": "Es gab Anfragen, diese wurden aber abgelehnt",
                         "description": "",
-                        "color": "#0065DE"
+                        "color": "orangered"
                     },
                     NO_REQUESTS: {
                         "name": "Keine zweckfremden Anfragen",
-                        "color": "#006400",
+                        "color": "darkgreen",
                         "description": ""
                     }
                 },
