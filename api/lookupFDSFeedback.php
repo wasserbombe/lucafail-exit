@@ -529,6 +529,26 @@
             "otherUsage" => ""
         ),
 
+        // https://fragdenstaat.de/a/240909 / Kreisverwaltung Bernkastel-Wittlich - FB33 Gesundheit
+        "240909" => array(
+            "date" => "2022-02-15",
+            "isConnected" => true,
+            "connectedSince" => null,
+            "connectedUntil" => null,
+            "isUsed" => false,
+            "isLucaWebsiteCorrect" => true,
+            "usage" => [],
+            "nonUsageInfo" => false,
+            "contactTracings3m" => 0,
+            "contactTracings6m" => 0,
+            "usagePlannedState" => null,
+            "usagePlannedDepartment" => false,
+            "lucaConnectPossible" => false,
+            "lucaConnectUsed" => false,
+            "isModellregion" => false,
+            "otherUsage" => ""
+        ),
+
         /****************************************************************************************************************************************************
          * Zweckentfremdung KPNV-Daten 
          */
