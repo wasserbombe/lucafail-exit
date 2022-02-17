@@ -754,6 +754,17 @@
                     }
                     $tr.append($("<td>").html("<small>"+contact_data_used_html+"</small>"));
 
+                    // non-using notification
+                    var non_using_notification_html = "?";
+                    if (department.fds_feedback && typeof department.fds_feedback.nonUsageInfo !== "undefined"){
+                        if (department.fds_feedback.nonUsageInfo === true){
+                            non_using_notification_html = "✔️";
+                        } else {
+                            non_using_notification_html = "❌";
+                        }
+                    }
+                    $tr.append($("<td>").html("<small>"+non_using_notification_html+"</small>"));
+
                     // beschreibung
                     var beschreibung = []; 
                     if (department.fds_feedback){
