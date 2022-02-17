@@ -571,6 +571,27 @@
             "otherUsage" => ""
         ),
 
+        // https://fragdenstaat.de/a/240040 / Gesundheitsamt Oberbergischer Kreis
+        "240040" => array(
+            "date" => "2022-02-17",
+            "isConnected" => true,
+            "connectedSince" => "April 2021",
+            "connectedUntil" => null,
+            "isUsed" => false,
+            "isLucaWebsiteCorrect" => true,
+            "usage" => [],
+            "nonUsageInfo" => false,
+            "contactTracings3m" => null,
+            "contactTracings6m" => null,
+            "contactTracingsTotal" => null,
+            "usagePlannedState" => false,
+            "usagePlannedDepartment" => false,
+            "lucaConnectPossible" => true,
+            "lucaConnectUsed" => null,
+            "isModellregion" => false,
+            "otherUsage" => ""
+        ),
+
         /****************************************************************************************************************************************************
          * Zweckentfremdung KPNV-Daten 
          */
