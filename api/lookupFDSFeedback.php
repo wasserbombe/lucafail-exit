@@ -549,6 +549,28 @@
             "otherUsage" => ""
         ),
 
+        // https://fragdenstaat.de/a/240087 / Landratsamt Sigmaringen - Fachbereich Gesundheit
+        "240087" => array(
+            "date" => "2022-02-17",
+            "isConnected" => true,
+            "connectedSince" => "wie BW",
+            "connectedUntil" => null,
+            "isUsed" => false,
+            "isLucaWebsiteCorrect" => true,
+            "usage" => [],
+            "nonUsageInfo" => false,
+            // 3/6m nachgefragt: https://fragdenstaat.de/anfrage/landratsamt-sigmaringen-aktuelle-nutzung-des-luca-systems-in-ihrer-behorde/#nachricht-671064
+            "contactTracings3m" => null,
+            "contactTracings6m" => null,
+            "contactTracingsTotal" => 20,
+            "usagePlannedState" => null,
+            "usagePlannedDepartment" => false,
+            "lucaConnectPossible" => false,
+            "lucaConnectUsed" => false,
+            "isModellregion" => false,
+            "otherUsage" => ""
+        ),
+
         /****************************************************************************************************************************************************
          * Zweckentfremdung KPNV-Daten 
          */
