@@ -1,4 +1,4 @@
-== Auskunft gemäß Art. 15 DS-GVO ==
+﻿== Auskunft gemäß Art. 15 DS-GVO ==
 
 === Zu Ihrer Person gespeicherte Daten ===
 Keine. 
