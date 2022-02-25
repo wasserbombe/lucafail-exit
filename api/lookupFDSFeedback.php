@@ -592,6 +592,195 @@
             "otherUsage" => ""
         ),
 
+        // https://fragdenstaat.de/a/239281 / Landratsamt Saalfeld-Rudolstadt - Gesundheitsamt
+        "239281" => array(
+            "date" => "2022-02-15",
+            "isConnected" => true,
+            "connectedSince" => "Juli 2021",
+            "connectedUntil" => "31.03.2022",
+            "isUsed" => false,
+            "isLucaWebsiteCorrect" => true,
+            "usage" => [],
+            "nonUsageInfo" => null,
+            "contactTracings3m" => null,
+            "contactTracings6m" => null,
+            "contactTracingsTotal" => 0,
+            "usagePlannedState" => null,
+            "usagePlannedDepartment" => null,
+            "lucaConnectPossible" => null,
+            "lucaConnectUsed" => null,
+            "isModellregion" => null,
+            "otherUsage" => ""
+        ),
+
+        // https://fragdenstaat.de/a/239323 / Landkreis Stormarn - Fachdienst Gesundheit/ Gesundheitsamt
+        "239323" => array(
+            "date" => "2022-02-23",
+            "isConnected" => false,
+            "connectedSince" => null,
+            "connectedUntil" => null,
+            "isUsed" => false,
+            "isLucaWebsiteCorrect" => true,
+            "usage" => [],
+            "nonUsageInfo" => null,
+            "contactTracings3m" => 0,
+            "contactTracings6m" => 0,
+            "contactTracingsTotal" => 0,
+            "usagePlannedState" => false,
+            "usagePlannedDepartment" => false,
+            "lucaConnectPossible" => false,
+            "lucaConnectUsed" => false,
+            "isModellregion" => false,
+            "otherUsage" => ""
+        ),
+
+        // https://fragdenstaat.de/a/239721 / Kreis Ostholstein - Fachdienst Gesundheit(Gesundheitsamt)
+        "239721" => array(
+            "date" => "2022-02-16",
+            "isConnected" => true,
+            "connectedSince" => "01.04.2021",
+            "connectedUntil" => "31.03.2022",
+            "isUsed" => true,
+            "isLucaWebsiteCorrect" => true,
+            "usage" => ["Kontaktnachverfolgung"],
+            "nonUsageInfo" => false,
+            "contactTracings3m" => 0,
+            "contactTracings6m" => 0,
+            "contactTracingsTotal" => 0,
+            "usagePlannedState" => false,
+            "usagePlannedDepartment" => false,
+            "lucaConnectPossible" => false,
+            "lucaConnectUsed" => false,
+            "isModellregion" => null,
+            "otherUsage" => "Nach Auskunft des Gesundheitsamtes liegt das Informieren der Nutzer und Betreiber im Aufgabenbereich der Firma neXenio."
+        ),
+
+        // https://fragdenstaat.de/a/241605 / Kreisverwaltung Neuwied - Abt. 11 Gesundheitsamt
+        "241605" => array(
+            "date" => "2022-02-22",
+            "isConnected" => true,
+            "connectedSince" => "Mai 2021",
+            "connectedUntil" => null,
+            "isUsed" => false,
+            "isLucaWebsiteCorrect" => true,
+            "usage" => [],
+            "nonUsageInfo" => false,
+            "contactTracings3m" => 0,
+            "contactTracings6m" => 0,
+            "contactTracingsTotal" => 0,
+            "usagePlannedState" => null,
+            "usagePlannedDepartment" => null,
+            "lucaConnectPossible" => true,
+            "lucaConnectUsed" => false,
+            "isModellregion" => null,
+            "otherUsage" => ""
+        ),
+
+        // https://fragdenstaat.de/a/239371 / Landratsamt Tübingen - Abteilung 33 Gesundheit
+        "239371" => array(
+            "date" => "2022-02-24",
+            "isConnected" => true,
+            "connectedSince" => "01.04.2021",
+            "connectedUntil" => "Ende März 2022",
+            "isUsed" => true,
+            "isLucaWebsiteCorrect" => true,
+            "usage" => ["Hinweise","Testempfehlungen"],
+            "nonUsageInfo" => false,
+            "contactTracings3m" => 0,
+            "contactTracings6m" => 3,
+            "contactTracingsTotal" => null,
+            "usagePlannedState" => false,
+            "usagePlannedDepartment" => false,
+            "lucaConnectPossible" => false,
+            "lucaConnectUsed" => false,
+            "isModellregion" => null,
+            "otherUsage" => ""
+        ),
+
+        // https://fragdenstaat.de/a/240191 / Landratsamt Reutlingen - Kreisgesundheitsamt
+        "240191" => array(
+            "date" => "2022-02-24",
+            "isConnected" => true,
+            "connectedSince" => "Juli 2021",
+            "connectedUntil" => null,
+            "isUsed" => false,
+            "isLucaWebsiteCorrect" => true,
+            "usage" => [],
+            "nonUsageInfo" => false,
+            "contactTracings3m" => 0,
+            "contactTracings6m" => 0,
+            "contactTracingsTotal" => null,
+            "usagePlannedState" => false,
+            "usagePlannedDepartment" => false,
+            "lucaConnectPossible" => null,
+            "lucaConnectUsed" => false,
+            "isModellregion" => null,
+            "otherUsage" => ""
+        ),
+
+        // https://fragdenstaat.de/a/240822 / Landratsamt Calw - Abt. 42 Gesundheit und Versorgung
+        "240822" => array(
+            "date" => "2022-02-24",
+            "isConnected" => true,
+            "connectedSince" => "April 2021",
+            "connectedUntil" => null,
+            "isUsed" => false,
+            "isLucaWebsiteCorrect" => true,
+            "usage" => ["Kontaktnachverfolgung"],
+            "nonUsageInfo" => false,
+            "contactTracings3m" => 0,
+            "contactTracings6m" => 0,
+            "contactTracingsTotal" => null,
+            "usagePlannedState" => false,
+            "usagePlannedDepartment" => false,
+            "lucaConnectPossible" => false,
+            "lucaConnectUsed" => false,
+            "isModellregion" => true,
+            "otherUsage" => "Die Luca-App wurde nur bis September 2021 genutzt; Calw war Pilotanwender in Baden-Württemberg."
+        ),
+
+        // https://fragdenstaat.de/a/240819 / Stadtverwaltung Weimar - Gesundheitsamt
+        "240819" => array(
+            "date" => "2022-02-24",
+            "isConnected" => false,
+            "connectedSince" => "März 2021",
+            "connectedUntil" => "Juli 2021",
+            "isUsed" => false,
+            "isLucaWebsiteCorrect" => false,
+            "usage" => [],
+            "nonUsageInfo" => false,
+            "contactTracings3m" => 0,
+            "contactTracings6m" => 0,
+            "contactTracingsTotal" => 0,
+            "usagePlannedState" => false,
+            "usagePlannedDepartment" => false,
+            "lucaConnectPossible" => false,
+            "lucaConnectUsed" => false,
+            "isModellregion" => true,
+            "otherUsage" => "Die Stadt Weimar war von März bis Juli 2021 Modellregion, hat Luca aber nie produktiv genutzt."
+        ),
+
+        // https://fragdenstaat.de/a/239412 / Landratsamt Breisgau-Hochschwarzwald - Gesundheitsamt
+        "239412" => array(
+            "date" => "2022-02-18",
+            "isConnected" => true,
+            "connectedSince" => "10.03.3021",
+            "connectedUntil" => "31.03.2022, ggf. früher",
+            "isUsed" => false,
+            "isLucaWebsiteCorrect" => true,
+            "usage" => ["Kontaktnachverfolgung"],
+            "nonUsageInfo" => false,
+            "contactTracings3m" => 3,
+            "contactTracings6m" => 3,
+            "contactTracingsTotal" => 20,
+            "usagePlannedState" => false,
+            "usagePlannedDepartment" => false,
+            "lucaConnectPossible" => false,
+            "lucaConnectUsed" => false,
+            "isModellregion" => false,
+            "otherUsage" => ""
+        ),
+
         /****************************************************************************************************************************************************
          * Zweckentfremdung KPNV-Daten 
          */
@@ -711,6 +900,34 @@
         "240522" => array(
             "contactDataDate" => "2022-02-14",
             "contactDataRequests" => 3,
+            "contactDataRequestsNotRejected" => 0
+        ),
+
+        // https://fragdenstaat.de/a/239342 / Bezirksamt Hamburg-Nord - Fachamt Gesundheit
+        "239342" => array(
+            "contactDataDate" => "2022-02-21",
+            "contactDataRequests" => 0,
+            "contactDataRequestsNotRejected" => 0
+        ),
+
+        // https://fragdenstaat.de/a/239315 / Hochsauerlandkreis - Gesundheitsamt Fachdienst 37
+        "239315" => array(
+            "contactDataDate" => "2022-02-18",
+            "contactDataRequests" => 0,
+            "contactDataRequestsNotRejected" => 0
+        ),
+
+        // https://fragdenstaat.de/a/239322 / Rheinisch-Bergischer Kreis - Der Landrat
+        "239322" => array(
+            "contactDataDate" => "2022-02-14",
+            "contactDataRequests" => 0,
+            "contactDataRequestsNotRejected" => 0
+        ),
+
+        // https://fragdenstaat.de/a/239670 / Landratsamt Rastatt - Gesundheitsamt
+        "239670" => array(
+            "contactDataDate" => "2022-02-24",
+            "contactDataRequests" => 0,
             "contactDataRequestsNotRejected" => 0
         ),
     ); 
